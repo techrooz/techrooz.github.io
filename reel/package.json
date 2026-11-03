@@ -1,0 +1,12 @@
+{
+  "name": "techrooz-reel",
+  "private": true,
+  "scripts": { "render": "remotion render src/index.ts Reel out.mp4" },
+  "dependencies": {
+    "@remotion/cli": "4.0.540",
+    "@remotion/google-fonts": "4.0.540",
+    "remotion": "4.0.540",
+    "react": "19.0.0",
+    "react-dom": "19.0.0"
+  }
+}

@@ -8,6 +8,11 @@ Voice: free Microsoft neural TTS (edge-tts) with a lower pitch, warmed up with E
 import asyncio, json, os, re, ssl, subprocess, sys, tempfile
 
 VOICE, RATE, PITCH = "fa-IR-FaridNeural", "-4%", "-14Hz"
+# breaths removed (gate), long pauses shortened, mud cut, presence and clarity up, de-essed
+CLEAN_VO = ("highpass=f=90,agate=threshold=0.025:ratio=6:attack=3:release=140:range=0.05,"
+            "silenceremove=stop_periods=-1:stop_duration=0.32:stop_threshold=-40dB,"
+            "equalizer=f=250:t=q:w=1:g=-2.5,equalizer=f=4200:t=q:w=1.2:g=3,deesser=i=0.4,"
+            "acompressor=threshold=-20dB:ratio=3:attack=4:release=80")
 
 
 def strip(t):
@@ -46,9 +51,10 @@ def main(item_path, out, vo=None):
     spoken = script.replace("*", "")
     d = tempfile.mkdtemp()
     raw, mp3, vid = (os.path.join(d, n) for n in ("raw.mp3", "v.m4a", "v.mp4"))
-    if vo:  # ready voice-over: time sentences by their length
-        raw = vo
-        total = float(subprocess.check_output(["ffprobe", "-v", "error", "-show_entries", "format=duration", "-of", "csv=p=0", vo]).decode())
+    if vo:  # ready voice-over: clean it, then time sentences by their length
+        raw = os.path.join(d, "clean.wav")
+        subprocess.run(["ffmpeg", "-loglevel", "error", "-y", "-i", vo, "-af", CLEAN_VO, raw], check=True)
+        total = float(subprocess.check_output(["ffprobe", "-v", "error", "-show_entries", "format=duration", "-of", "csv=p=0", raw]).decode())
         ss = [x.strip() for x in re.split(r"(?<=[.!؟?])\s+", spoken) if x.strip()]
         w = [len(x) + 12 for x in ss]; acc = 0.0; marks = []
         for x, k in zip(ss, w):
@@ -72,7 +78,13 @@ def main(item_path, out, vo=None):
     photos = it.get("photos") or ([it["photo"]] if it.get("photo") else [])
     spec = os.path.join(d, "spec.json")
     json.dump({"scenes": scenes, "photos": photos, "cat": it.get("cat"), "seconds": total}, open(spec, "w"), ensure_ascii=False)
-    subprocess.run(["node", os.path.join(os.path.dirname(os.path.abspath(__file__)), "make_reel.js"), spec, vid], check=True)
+    if os.environ.get("REEL_ENGINE", "remotion") == "remotion":
+        reel_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "reel")
+        subprocess.run(["npx", "remotion", "render", "src/index.ts", "Reel", vid, f"--props={spec}", "--log=error",
+                        "--concurrency=4"] + (["--browser-executable", os.environ["REEL_BROWSER"]] if os.environ.get("REEL_BROWSER") else []),
+                       cwd=reel_dir, check=True)
+    else:
+        subprocess.run(["node", os.path.join(os.path.dirname(os.path.abspath(__file__)), "make_reel.js"), spec, vid], check=True)
     here = os.path.dirname(os.path.abspath(__file__))
     music, wh, hit = (os.path.join(d, n) for n in ("m.wav", "w.wav", "h.wav"))
     subprocess.run([sys.executable, os.path.join(here, "make_music.py"), str(total + 1), "112", music, wh, hit], check=True)
