@@ -41,9 +41,13 @@ WAIT_LIMIT = 30  # seconds; the daemon loop checks every 20s, then waits for the
 def send(item):
     global SILENT
     SILENT = bool(item.get("silent"))
-    if item.get("poll"):  # {"question": "...", "options": ["..", ".."]}
-        return call("sendPoll", {"chat_id": CHAT, "question": item["poll"]["question"],
-                                 "options": [{"text": o} for o in item["poll"]["options"]], "is_anonymous": True})
+    if item.get("poll"):  # {"question", "options", optional "correct" (index) + "explanation" = quiz}
+        pl = item["poll"]
+        payload = {"chat_id": CHAT, "question": pl["question"][:300],
+                   "options": [{"text": o[:100]} for o in pl["options"][:10]], "is_anonymous": True}
+        if "correct" in pl:
+            payload.update(type="quiz", correct_option_id=pl["correct"], explanation=pl.get("explanation", "")[:200])
+        return call("sendPoll", payload)
     if len(item.get("photos") or []) > 1:  # album: several photos, caption on the first
         media = [{"type": "photo", "media": u} for u in item["photos"][:10]]
         media[0].update(caption=item["caption"], parse_mode="HTML")
@@ -110,6 +114,22 @@ OWNER, BOT = "mohammadsafari2222", "TechRooz_fa_bot"
 ALLOWED_ADMINS = ["mohammadsafari2222", "TechRooz_fa_bot", "parisafarii"]  # parisafarii: added by Mohammad
 
 
+MILESTONES = [25, 50, 100, 200, 300, 500, 750, 1000, 1500, 2000, 3000, 5000, 7500, 10000]
+
+
+def milestone(members, old):
+    """Post a short thank-you when the channel crosses a member milestone (social proof, free)."""
+    prev = max([r.get("members") or 0 for r in old] or [0])
+    hit = [m for m in MILESTONES if prev < m <= (members or 0)]
+    if not hit:
+        return
+    m = hit[-1]
+    text = (f"🎉 <b>تک‌روز {m:,} نفره شد!</b>\n\nممنون که همراه مایید 💙 هر روز با داغ‌ترین خبرهای تکنولوژی، گیم و هوش مصنوعی اینجاییم.\n\n"
+            f"اگه از کانال راضی هستی، برای یه نفر دیگه هم بفرستش تا زودتر به {next((x for x in MILESTONES if x > m), m * 2):,} نفر برسیم 👇\n"
+            "https://t.me/techrooz_fa\n\n⚡ تک‌روز | @techrooz_fa").replace(",", "٬")
+    call("sendMessage", {"chat_id": CHAT, "text": text, "parse_mode": "HTML", "disable_web_page_preview": True})
+
+
 def daily_stats():
     """Once a day: member count + admin check, saved to stats.json (read by the daily Claude run,
     so Claude never needs the bot token)."""
@@ -134,6 +154,7 @@ def daily_stats():
     except Exception as e:  # stats are best-effort
         print("views fetch failed:", e)
     avg = round(sum(views) / len(views)) if views else 0
+    milestone(members, old)
     old.append({"date": today, "members": members, "admins": admins,
                 "admins_ok": set(admins) <= set(ALLOWED_ADMINS), "title": chat.get("title"),
                 "avg_views": avg, "reach_pct": round(100 * avg / members, 1) if members else 0})
