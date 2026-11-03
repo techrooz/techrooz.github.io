@@ -243,11 +243,7 @@ def daemon(hours):
         git("pull", "-q", "--rebase", "origin", "main")
         prefetch()
         changed = one_pass() == "changed"
-        try:
-            import referral
-            changed = referral.process(TOKEN) or changed
-        except Exception as e:  # the invite bot must never stop posting
-            print("referral:", e)
+        # invite bot is switched off (Mohammad cancelled it); code kept in scripts/referral.py
         if datetime.now(TEH).hour >= 6 and daily_stats():
             changed = True
         if changed:
