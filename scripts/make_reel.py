@@ -40,16 +40,24 @@ async def tts(text, mp3):
     return marks
 
 
-def main(item_path, out):
+def main(item_path, out, vo=None):
     it = json.load(open(item_path, encoding="utf-8"))
     script = it.get("voice") or auto_voice(it)
     spoken = script.replace("*", "")
     d = tempfile.mkdtemp()
     raw, mp3, vid = (os.path.join(d, n) for n in ("raw.mp3", "v.m4a", "v.mp4"))
-    marks = asyncio.run(tts(spoken, raw))
+    if vo:  # ready voice-over: time sentences by their length
+        raw = vo
+        total = float(subprocess.check_output(["ffprobe", "-v", "error", "-show_entries", "format=duration", "-of", "csv=p=0", vo]).decode())
+        ss = [x.strip() for x in re.split(r"(?<=[.!؟?])\s+", spoken) if x.strip()]
+        w = [len(x) + 12 for x in ss]; acc = 0.0; marks = []
+        for x, k in zip(ss, w):
+            marks.append({"start": acc, "dur": total * k / sum(w), "text": x}); acc += total * k / sum(w)
+    else:
+        marks = asyncio.run(tts(spoken, raw))
     # warmer, deeper, radio-like voice
     subprocess.run(["ffmpeg", "-loglevel", "error", "-y", "-i", raw, "-af",
-                    "equalizer=f=110:t=q:w=1.1:g=5,equalizer=f=3200:t=q:w=1:g=2,acompressor=threshold=-18dB:ratio=3:attack=5:release=80,loudnorm=I=-15",
+                    ("acompressor=threshold=-20dB:ratio=2.5:attack=5:release=90,loudnorm=I=-15" if vo else "equalizer=f=110:t=q:w=1.1:g=5,equalizer=f=3200:t=q:w=1:g=2,acompressor=threshold=-18dB:ratio=3:attack=5:release=80,loudnorm=I=-15"),
                     "-c:a", "aac", "-b:a", "160k", mp3], check=True)
     dur = float(subprocess.check_output(["ffprobe", "-v", "error", "-show_entries", "format=duration", "-of", "csv=p=0", mp3]).decode())
     # map each spoken sentence back to its *emphasis* marks in the script
@@ -65,10 +73,22 @@ def main(item_path, out):
     spec = os.path.join(d, "spec.json")
     json.dump({"scenes": scenes, "photos": photos, "cat": it.get("cat"), "seconds": total}, open(spec, "w"), ensure_ascii=False)
     subprocess.run(["node", os.path.join(os.path.dirname(os.path.abspath(__file__)), "make_reel.js"), spec, vid], check=True)
-    subprocess.run(["ffmpeg", "-loglevel", "error", "-y", "-i", vid, "-i", mp3, "-filter_complex", "[1:a]adelay=350|350,apad[a]",
-                    "-map", "0:v", "-map", "[a]", "-c:v", "copy", "-c:a", "aac", "-shortest", "-movflags", "+faststart", out], check=True)
+    here = os.path.dirname(os.path.abspath(__file__))
+    music, wh, hit = (os.path.join(d, n) for n in ("m.wav", "w.wav", "h.wav"))
+    subprocess.run([sys.executable, os.path.join(here, "make_music.py"), str(total + 1), "112", music, wh, hit], check=True)
+    sfx_in, sfx_map = [], []
+    for k, sc in enumerate(scenes):
+        sfx_in += ["-i", hit if k == 0 else wh]
+        ms = int(max(0, sc["start"] - (0 if k == 0 else 0.2)) * 1000)
+        sfx_map.append(f"[{k + 3}:a]adelay={ms}|{ms},volume={1.0 if k == 0 else 0.55}[s{k}]")
+    n = len(scenes)
+    fc = (f"[1:a]adelay=350|350,apad,asplit=2[vo][vok];[2:a]volume=0.22[mu];[mu][vok]sidechaincompress=threshold=0.03:ratio=8:attack=20:release=300[duck];"
+          + ";".join(sfx_map) + ";" + "[duck][vo]" + "".join(f"[s{k}]" for k in range(n)) + f"amix=inputs={n + 2}:normalize=0[a]")
+    subprocess.run(["ffmpeg", "-loglevel", "error", "-y", "-i", vid, "-i", mp3, "-i", music] + sfx_in +
+                   ["-filter_complex", fc, "-map", "0:v", "-map", "[a]", "-c:v", "copy", "-c:a", "aac", "-b:a", "192k",
+                    "-t", str(total), "-movflags", "+faststart", out], check=True)
     print(out, total, "s,", len(scenes), "scenes")
 
 
 if __name__ == "__main__":
-    main(sys.argv[1], sys.argv[2])
+    main(sys.argv[1], sys.argv[2], sys.argv[3] if len(sys.argv) > 3 else None)
