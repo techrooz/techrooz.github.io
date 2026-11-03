@@ -107,6 +107,7 @@ def git(*args):
 
 TEH = timezone(timedelta(hours=3, minutes=30))
 OWNER, BOT = "mohammadsafari2222", "TechRooz_fa_bot"
+ALLOWED_ADMINS = ["mohammadsafari2222", "TechRooz_fa_bot", "parisafarii"]  # parisafarii: added by Mohammad
 
 
 def daily_stats():
@@ -134,7 +135,7 @@ def daily_stats():
         print("views fetch failed:", e)
     avg = round(sum(views) / len(views)) if views else 0
     old.append({"date": today, "members": members, "admins": admins,
-                "admins_ok": sorted(admins) == sorted([OWNER, BOT]), "title": chat.get("title"),
+                "admins_ok": set(admins) <= set(ALLOWED_ADMINS), "title": chat.get("title"),
                 "avg_views": avg, "reach_pct": round(100 * avg / members, 1) if members else 0})
     json.dump(old[-120:], open("stats.json", "w", encoding="utf-8"), ensure_ascii=False, indent=1)
     return True
