@@ -4,7 +4,7 @@ Runs in GitHub Actions. Needs the TELEGRAM_BOT_TOKEN secret.
 Each queue item: {"at": "2026-11-02T08:30:00Z", "photo": "<url or empty>", "caption": "<HTML>", "source": "<url>", "posted": false}
 Optional: "photos" (list of 2-10 image URLs = album), "poll" ({"question", "options"}), "silent" (no notification sound), "video" (direct mp4 URL, posted with sendVideo) and "link" (text post shows its preview, e.g. YouTube).
 """
-import json, os, subprocess, sys, time, urllib.parse, urllib.request, urllib.error
+import json, os, re, subprocess, sys, time, uuid, urllib.parse, urllib.request, urllib.error
 from datetime import datetime, timedelta, timezone
 
 QUEUE = "queue.json"
@@ -34,6 +34,39 @@ def call(method, payload):
         return json.load(e)
 
 
+VIDEO_CACHE = {}  # item "at" -> local mp4 path, filled shortly before the post time
+
+
+def prepare_video(item):
+    """Download a source video (mp4 or HLS), trim to ~75s and compress for Telegram (<48MB)."""
+    out = os.path.join("/tmp", "tr_" + re.sub(r"\W", "", item["at"]) + ".mp4")
+    if not os.path.exists(out):
+        r = subprocess.run(["ffmpeg", "-loglevel", "error", "-y", "-t", str(item.get("video_max", 75)), "-i", item["video_src"],
+                            "-vf", "scale='min(1280,iw)':-2", "-c:v", "libx264", "-preset", "veryfast", "-crf", "27",
+                            "-pix_fmt", "yuv420p", "-c:a", "aac", "-b:a", "96k", "-movflags", "+faststart", out], timeout=600)
+        if r.returncode or not os.path.exists(out) or os.path.getsize(out) > 48e6:
+            print("video prepare failed", item["at"])
+            return None
+    return out
+
+
+def upload_video(path, item):
+    bd = uuid.uuid4().hex
+    fields = {"chat_id": CHAT, "caption": item["caption"], "parse_mode": "HTML", "supports_streaming": "true",
+              "reply_markup": json.dumps(BUTTONS, ensure_ascii=False)}
+    if SILENT:
+        fields["disable_notification"] = "true"
+    body = b"".join(f'--{bd}\r\nContent-Disposition: form-data; name="{k}"\r\n\r\n{v}\r\n'.encode() for k, v in fields.items())
+    body += f'--{bd}\r\nContent-Disposition: form-data; name="video"; filename="v.mp4"\r\nContent-Type: video/mp4\r\n\r\n'.encode()
+    body += open(path, "rb").read() + f"\r\n--{bd}--\r\n".encode()
+    req = urllib.request.Request(f"https://api.telegram.org/bot{TOKEN}/sendVideo", data=body,
+                                 headers={"Content-Type": f"multipart/form-data; boundary={bd}"})
+    try:
+        return json.load(urllib.request.urlopen(req, timeout=300))
+    except urllib.error.HTTPError as e:
+        return json.load(e)
+
+
 SILENT = False
 WAIT_LIMIT = 30  # seconds; the daemon loop checks every 20s, then waits for the exact second
 
@@ -48,6 +81,13 @@ def send(item):
         if "correct" in pl:
             payload.update(type="quiz", correct_option_id=pl["correct"], explanation=pl.get("explanation", "")[:200])
         return call("sendPoll", payload)
+    if item.get("video_src"):
+        path = VIDEO_CACHE.get(item["at"]) or prepare_video(item)
+        if path:
+            r = upload_video(path, item)
+            if r.get("ok"):
+                return r
+            print("video upload failed:", r.get("description"))
     if len(item.get("photos") or []) > 1:  # album: several photos, caption on the first
         media = [{"type": "photo", "media": u} for u in item["photos"][:10]]
         media[0].update(caption=item["caption"], parse_mode="HTML")
@@ -88,6 +128,10 @@ def one_pass():
     changed = False
     for item in queue:
         if item.get("posted") or item.get("hold"):
+            continue
+        # never post the same story twice (same source link as an earlier post)
+        if item.get("source") and any(o.get("posted") and o.get("source") == item["source"] and o is not item for o in queue):
+            print("skip duplicate", item["at"]); item["posted"] = True; item["skipped"] = "duplicate"; changed = True
             continue
         if datetime.fromisoformat(item["at"].replace("Z", "+00:00")) > now:
             continue
@@ -175,12 +219,29 @@ def indexnow():
         print("indexnow:", e)
 
 
+def prefetch():
+    """Prepare videos for posts due in the next 12 minutes, so they still go out on time."""
+    try:
+        queue = json.load(open(QUEUE, encoding="utf-8"))
+    except (OSError, ValueError):
+        return
+    now = datetime.now(timezone.utc)
+    for it in queue:
+        if it.get("video_src") and not it.get("posted") and it["at"] not in VIDEO_CACHE:
+            when = datetime.fromisoformat(it["at"].replace("Z", "+00:00"))
+            if timedelta(0) <= when - now <= timedelta(minutes=12):
+                path = prepare_video(it)
+                if path:
+                    VIDEO_CACHE[it["at"]] = path
+
+
 def daemon(hours):
     """Stay up for `hours`: pull new queue items, post each one exactly on time,
     save the queue and rebuild the website after every post."""
     end = time.time() + hours * 3600
     while time.time() < end:
         git("pull", "-q", "--rebase", "origin", "main")
+        prefetch()
         changed = one_pass() == "changed"
         if datetime.now(TEH).hour >= 6 and daily_stats():
             changed = True
