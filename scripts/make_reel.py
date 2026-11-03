@@ -97,7 +97,7 @@ def main(item_path, out, vo=None):
     fc = (f"[1:a]adelay=350|350,apad,asplit=2[vo][vok];[2:a]volume=0.22[mu];[mu][vok]sidechaincompress=threshold=0.03:ratio=8:attack=20:release=300[duck];"
           + ";".join(sfx_map) + ";" + "[duck][vo]" + "".join(f"[s{k}]" for k in range(n)) + f"amix=inputs={n + 2}:normalize=0[a]")
     subprocess.run(["ffmpeg", "-loglevel", "error", "-y", "-i", vid, "-i", mp3, "-i", music] + sfx_in +
-                   ["-filter_complex", fc, "-map", "0:v", "-map", "[a]", "-c:v", "copy", "-c:a", "aac", "-b:a", "192k",
+                   ["-filter_complex", fc, "-map", "0:v", "-map", "[a]", "-c:v", "libx264", "-pix_fmt", "yuv420p", "-crf", "26", "-maxrate", "2500k", "-bufsize", "5000k", "-c:a", "aac", "-b:a", "128k",
                     "-t", str(total), "-movflags", "+faststart", out], check=True)
     print(out, total, "s,", len(scenes), "scenes")
 
