@@ -175,7 +175,7 @@ export const Tips: React.FC<TipsProps> = ({ scenes, lines, seconds, hot }) => {
       <Page />
       {scenes.map((s, i) => <Scene key={i} s={s} />)}
       <Captions lines={lines} hot={hot} />
-      <div style={{ position: "absolute", top: 80, left: 0, right: 0, textAlign: "center", fontFamily: V, fontWeight: 800, fontSize: 36, color: "#555", direction: "rtl" }}>⚡ تک‌روز</div>
+      <div style={{ position: "absolute", top: 70, left: 0, right: 0, display: "flex", justifyContent: "center" }}><div style={{ fontFamily: L, fontSize: 64, color: "#fff", background: "#111", padding: "6px 34px", borderRadius: 999, direction: "rtl", boxShadow: "0 10px 30px rgba(0,0,0,.25)" }}>⚡ تک‌روز</div></div>
       <div style={{ position: "absolute", top: 0, right: 0, height: 8, background: RED, width: `${(t / seconds) * 100}%` }} />
     </AbsoluteFill>
   );

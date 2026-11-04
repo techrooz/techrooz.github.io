@@ -95,7 +95,7 @@ export const Clip: React.FC<ClipProps> = ({ shots, lines, pops, hook, title, cre
       ))}
       <Captions lines={lines} />
       <div style={{ position: "absolute", top: 90, left: 0, right: 0, textAlign: "center", direction: "rtl",
-        fontFamily: V, fontWeight: 900, fontSize: 40, color: "#fff", opacity: 0.92 }}>⚡ تک‌روز · {title}</div>
+        fontFamily: V, fontWeight: 900, fontSize: 64, color: "#fff", textShadow: "0 4px 18px rgba(0,0,0,.8)" }}>⚡ تک‌روز</div>
       <div style={{ position: "absolute", bottom: 60, left: 0, right: 0, textAlign: "center", fontFamily: V, fontWeight: 500,
         fontSize: 24, color: "rgba(255,255,255,.6)" }}>{credit}</div>
       <div style={{ position: "absolute", top: 0, right: 0, height: 10, background: "#FFD60A", width: `${(f / (seconds * fps)) * 100}%` }} />
