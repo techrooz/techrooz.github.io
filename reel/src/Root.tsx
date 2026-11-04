@@ -4,6 +4,7 @@ import { Reel, ReelProps } from "./Reel";
 import { Story, StoryProps } from "./Story";
 import { Clip, ClipProps } from "./Clip";
 import { Tips, TipsProps } from "./Tips";
+import { Editorial, EditorialProps } from "./Editorial";
 
 const FPS = 30;
 export const Root: React.FC = () => (
@@ -47,6 +48,16 @@ export const Root: React.FC = () => (
     durationInFrames={60 * FPS}
     defaultProps={{ scenes: [], lines: [], seconds: 10, hot: [] } as TipsProps}
     calculateMetadata={({ props }) => ({ durationInFrames: Math.ceil((props as TipsProps).seconds * FPS) })}
+  />
+  <Composition
+    id="Editorial"
+    component={Editorial}
+    fps={FPS}
+    width={1080}
+    height={1920}
+    durationInFrames={60 * FPS}
+    defaultProps={{ scenes: [], lines: [], seconds: 10, hot: [] } as EditorialProps}
+    calculateMetadata={({ props }) => ({ durationInFrames: Math.ceil((props as EditorialProps).seconds * FPS) })}
   />
   </>
 );

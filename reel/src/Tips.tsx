@@ -6,7 +6,7 @@ import { loadFont as vazir } from "@remotion/google-fonts/Vazirmatn";
 import { loadFont as lalezar } from "@remotion/google-fonts/Lalezar";
 const V = vazir("normal", { weights: ["300", "800", "900"], subsets: ["arabic", "latin"] }).fontFamily;
 const L = lalezar("normal", { subsets: ["arabic", "latin"] }).fontFamily;
-const RED = "#E11D2E";
+export const RED = "#E11D2E";
 
 export type TipScene = {
   start: number; end: number; kind: "hook" | "code" | "stamp" | "end";
@@ -16,11 +16,11 @@ export type TipScene = {
 export type TipLine = { text: string; start: number; end: number };
 export type TipsProps = { scenes: TipScene[]; lines: TipLine[]; seconds: number; hot: string[] };
 
-const useT = () => { const f = useCurrentFrame(); const { fps } = useVideoConfig(); return { f, fps, t: f / fps }; };
-const ease = (t: number, a: number, b: number) => interpolate(t, [a, b], [0, 1], { extrapolateLeft: "clamp", extrapolateRight: "clamp", easing: Easing.out(Easing.cubic) });
+export const useT = () => { const f = useCurrentFrame(); const { fps } = useVideoConfig(); return { f, fps, t: f / fps }; };
+export const ease = (t: number, a: number, b: number) => interpolate(t, [a, b], [0, 1], { extrapolateLeft: "clamp", extrapolateRight: "clamp", easing: Easing.out(Easing.cubic) });
 
 // soft page with drifting out-of-focus shapes
-const Page: React.FC = () => {
+export const Page: React.FC = () => {
   const { t } = useT();
   const blob = (x: number, y: number, s: number, r: number, k: number) => (
     <div style={{ position: "absolute", left: x + Math.sin(t * 0.5 + k) * 30, top: y + Math.cos(t * 0.4 + k) * 30, width: s, height: s,
@@ -38,7 +38,7 @@ const Page: React.FC = () => {
 };
 
 // word that appears blurred -> sharp
-const Reveal: React.FC<{ text: string; at: number; style: React.CSSProperties; ghost?: boolean }> = ({ text, at, style, ghost }) => {
+export const Reveal: React.FC<{ text: string; at: number; style: React.CSSProperties; ghost?: boolean }> = ({ text, at, style, ghost }) => {
   const { t } = useT();
   const p = ease(t, at, at + 0.45);
   return (
@@ -97,7 +97,7 @@ const Phone: React.FC<{ s: TipScene }> = ({ s }) => {
   );
 };
 
-const Stamp: React.FC<{ text: string; at: number; x: number; y: number; size?: number }> = ({ text, at, x, y, size = 250 }) => {
+export const Stamp: React.FC<{ text: string; at: number; x: number; y: number; size?: number }> = ({ text, at, x, y, size = 250 }) => {
   const { f, fps } = useT();
   const p = spring({ frame: f - Math.round(at * fps), fps, config: { damping: 8, stiffness: 200 } });
   return (
@@ -108,7 +108,7 @@ const Stamp: React.FC<{ text: string; at: number; x: number; y: number; size?: n
   );
 };
 
-const Arrow: React.FC<{ at: number; x: number; y: number; flip?: boolean }> = ({ at, x, y, flip }) => {
+export const Arrow: React.FC<{ at: number; x: number; y: number; flip?: boolean }> = ({ at, x, y, flip }) => {
   const { t } = useT();
   const p = ease(t, at, at + 0.6);
   return (
@@ -139,7 +139,7 @@ const Scene: React.FC<{ s: TipScene }> = ({ s }) => {
   );
 };
 
-const Captions: React.FC<{ lines: TipLine[]; hot: string[] }> = ({ lines, hot }) => {
+export const Captions: React.FC<{ lines: TipLine[]; hot: string[] }> = ({ lines, hot }) => {
   const { t, fps } = useT();
   const line = lines.find((l) => t >= l.start && t < l.end + 0.12);
   if (!line) return null;
