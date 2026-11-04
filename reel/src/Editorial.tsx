@@ -106,11 +106,15 @@ const Price: React.FC<{ s: EdScene }> = ({ s }) => {
 
 const Scene: React.FC<{ s: EdScene }> = ({ s }) => {
   const { t } = useT();
-  const op = Math.min(ease(t, s.start, s.start + 0.25), 1 - ease(t, s.end - 0.05, s.end + 0.2));
+  const inP = ease(t, s.start, s.start + 0.22), outP = ease(t, s.end - 0.04, s.end + 0.16);
+  const op = Math.min(inP, 1 - outP);
   if (op <= 0) return null;
   if (s.glitch) return <AbsoluteFill style={{ opacity: op }}><Glitch s={s} /></AbsoluteFill>;
+  // whip-in from the right, whip-out to the left (with motion blur) + punch-in zoom
+  const x = (1 - inP) * 260 - outP * 260;
+  const punch = 1 + (1 - ease(t, s.start, s.start + 0.3)) * 0.12;
   return (
-    <AbsoluteFill style={{ opacity: op, filter: `blur(${(1 - op) * 10}px)`, transform: `scale(${1 + (t - s.start) * 0.01})` }}>
+    <AbsoluteFill style={{ opacity: op, filter: `blur(${Math.abs(x) / 18}px)`, transform: `translateX(${x}px) scale(${punch * (1 + (t - s.start) * 0.01)})` }}>
       {s.lead && <Reveal text={s.lead} at={s.start + 0.02} style={{ position: "absolute", top: 220, left: 60, right: 60, fontFamily: V, fontWeight: 300, fontSize: 58, color: "#444" }} />}
       {s.big && <Reveal ghost text={s.big} at={s.start + 0.2} style={{ position: "absolute", top: 290, left: 30, right: 30, fontFamily: L, fontSize: 132, lineHeight: 1.05, color: "#111" }} />}
       {s.media && <Card s={s} />}
@@ -124,6 +128,19 @@ const Scene: React.FC<{ s: EdScene }> = ({ s }) => {
   );
 };
 
+const Leak: React.FC<{ scenes: EdScene[] }> = ({ scenes }) => {
+  const { t } = useT();
+  const s = scenes.find((q) => t >= q.start - 0.05 && t < q.start + 0.6);
+  if (!s) return null;
+  const p = (t - s.start + 0.05) / 0.65;
+  return (
+    <AbsoluteFill style={{ pointerEvents: "none", mixBlendMode: "screen" }}>
+      <AbsoluteFill style={{ background: `radial-gradient(circle at ${-20 + p * 140}% 30%, rgba(255,170,90,.55), rgba(255,60,90,.25) 25%, transparent 50%)`, opacity: Math.sin(Math.PI * Math.min(1, p)) }} />
+      <AbsoluteFill style={{ background: "#fff", opacity: Math.max(0, 0.35 - p * 3) }} />
+    </AbsoluteFill>
+  );
+};
+
 export const Editorial: React.FC<EditorialProps> = ({ scenes, lines, seconds, hot }) => {
   const { t } = useT();
   const dark = scenes.some((s) => s.glitch && t >= s.start && t < s.end);
@@ -131,6 +148,7 @@ export const Editorial: React.FC<EditorialProps> = ({ scenes, lines, seconds, ho
     <AbsoluteFill style={{ direction: "ltr" }}>
       <Page />
       {scenes.map((s, i) => <Scene key={i} s={s} />)}
+      <Leak scenes={scenes} />
       <Captions lines={lines} hot={hot} />
       <div style={{ position: "absolute", top: 70, left: 0, right: 0, display: "flex", justifyContent: "center" }}>
         <div style={{ fontFamily: L, fontSize: 64, color: dark ? "#111" : "#fff", background: dark ? "#fff" : "#111", padding: "6px 34px", borderRadius: 999, direction: "rtl", boxShadow: "0 10px 30px rgba(0,0,0,.25)" }}>⚡ تک‌روز</div>
