@@ -211,13 +211,14 @@ def main(queue_path, site):
         os.makedirs(os.path.join(site, d), exist_ok=True)
     posts = []
     for it in json.load(open(queue_path, encoding="utf-8")):
-        if not it.get("posted"):
+        # the site only shows its own long version (site.title / site.body), never the Telegram text
+        if not it.get("posted") or not it.get("site"):
             continue
         d = datetime.fromisoformat(it["at"].replace("Z", "+00:00")).astimezone(TEH)
         photo = it.get("photo") or (it.get("photos") or [""])[0]
         posts.append({"at": it["at"], "slug": d.strftime("%Y%m%d-%H%M"), "date": jalali(d), "photo": photo,
-                      "caption": it["caption"], "source": it.get("source", ""), "cat": cat_of(it),
-                      "title": title_of(it["caption"])})
+                      "caption": it["site"]["body"], "source": it.get("source", ""), "cat": cat_of(it),
+                      "title": it["site"]["title"]})
     posts.sort(key=lambda p: p["at"], reverse=True)
     today = jalali(datetime.now(TEH), False)
     open(os.path.join(site, "style.css"), "w").write(CSS)
@@ -231,7 +232,7 @@ def main(queue_path, site):
         src = f'<div class="src">منبع: <a href="{E(p["source"])}" rel="nofollow noopener">{E(p["source"].split("/")[2])}</a></div>' if p["source"].startswith("http") else ""
         rel = [q for q in posts if q is not p and q["cat"] == p["cat"]][:4] or [q for q in posts if q is not p][:4]
         body = (f'<main class="wrap"><article class="post" style="--c:{c}"><div class="kicker">{e} {n}</div><h1>{E(p["title"])}</h1>'
-                f'<div class="time">{p["date"]}</div>{cover}<div class="body">{clean(body_of(p["caption"]))}</div>{src}'
+                f'<div class="time">{p["date"]}</div>{cover}<div class="body">{clean(p["caption"])}</div>{src}'
                 f'<div><a class="btn" href="https://t.me/share/url?url={SITE_URL}/p/{p["slug"]}.html">📤 ارسال در تلگرام</a>'
                 f'<button class="btn copylink">🔗 کپی لینک</button></div></article>{JOIN}'
                 f'<div class="sec"><h2>بیشتر از {n}</h2><a href="../c/{k}.html">همه ←</a></div><div class="grid">'
@@ -242,7 +243,7 @@ def main(queue_path, site):
                          "mainEntityOfPage": f"{SITE_URL}/p/{p['slug']}.html"}, ensure_ascii=False)
         og += f'<meta property="og:type" content="article"><script type="application/ld+json">{ld}</script>'
         open(os.path.join(site, "p", p["slug"] + ".html"), "w", encoding="utf-8").write(
-            page(p["title"] + " | تک‌روز", plain(body_of(p["caption"]))[:155], f"{SITE_URL}/p/{p['slug']}.html", "../", k, today, body, og))
+            page(p["title"] + " | تک‌روز", plain(p["caption"])[:155], f"{SITE_URL}/p/{p['slug']}.html", "../", k, today, body, og))
 
     for k, n, e, c, _ in CATS:
         group = [p for p in posts if p["cat"] == k]
@@ -286,7 +287,7 @@ q.oninput=show;show()});</script>''')
 
     rss = "".join(f"<item><title>{E(p['title'])}</title><link>{SITE_URL}/p/{p['slug']}.html</link><guid>{SITE_URL}/p/{p['slug']}.html</guid>"
                   f"<pubDate>{datetime.fromisoformat(p['at'].replace('Z', '+00:00')).strftime('%a, %d %b %Y %H:%M:%S +0000')}</pubDate>"
-                  f"<description>{E(plain(body_of(p['caption']))[:300])}</description></item>" for p in posts[:50])
+                  f"<description>{E(plain(p['caption'])[:300])}</description></item>" for p in posts[:50])
     open(os.path.join(site, "feed.xml"), "w", encoding="utf-8").write(
         f'<?xml version="1.0" encoding="UTF-8"?><rss version="2.0"><channel><title>تک‌روز</title><link>{SITE_URL}</link>'
         f'<description>اخبار تکنولوژی، گیم و هوش مصنوعی به زبان ساده</description><language>fa</language>{rss}</channel></rss>')
