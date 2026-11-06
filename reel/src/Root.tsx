@@ -5,6 +5,7 @@ import { Story, StoryProps } from "./Story";
 import { Clip, ClipProps } from "./Clip";
 import { Chat, ChatProps } from "./Chat";
 import { Collage, CollageProps } from "./Collage";
+import { Cinema, CinemaProps } from "./Cinema";
 import { Tips, TipsProps } from "./Tips";
 import { Editorial, EditorialProps } from "./Editorial";
 
@@ -50,6 +51,16 @@ export const Root: React.FC = () => (
     durationInFrames={60 * FPS}
     defaultProps={{ seconds: 10, lines: [], hot: [], scenes: [] } as CollageProps}
     calculateMetadata={({ props }) => ({ durationInFrames: Math.ceil((props as CollageProps).seconds * FPS) })}
+  />
+  <Composition
+    id="Cinema"
+    component={Cinema}
+    fps={FPS}
+    width={1080}
+    height={1920}
+    durationInFrames={60 * FPS}
+    defaultProps={{ seconds: 10, scenes: [] } as CinemaProps}
+    calculateMetadata={({ props }) => ({ durationInFrames: Math.ceil((props as CinemaProps).seconds * FPS) })}
   />
   <Composition
     id="Chat"
