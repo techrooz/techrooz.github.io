@@ -80,7 +80,7 @@ const SceneView: React.FC<{ s: LScene }> = ({ s }) => {
     (s.nodes ?? []).forEach((n, i) => { const np = spring({ frame: f - Math.round((s.start + 0.3 + i * (len * 0.26)) * fps), fps, config: { damping: 12, stiffness: 150 } }); body.push(
       <div key={"n" + i} style={{ position: "absolute", top: ys[i], left: 0, width: "100%", display: "flex", flexDirection: "column", alignItems: "center", transform: `scale(${np})`, opacity: np, direction: "rtl" }}>
         <div style={{ position: "relative", width: 280, height: 280, borderRadius: 140, overflow: "hidden", border: `5px solid ${n.red ? RED : "#fff"}`, background: "#101015", display: "flex", alignItems: "center", justifyContent: "center", boxShadow: n.red ? "0 0 60px rgba(232,54,43,.5)" : "none" }}>
-          {n.src ? <Vid src={n.src} dur={n.dur ?? 3} w={280} h={280} z={1.2} /> : <div style={{ fontFamily: V, fontWeight: 900, fontSize: 110, color: "#fff" }}>۲۰۱۹</div>}
+          {n.src ? <Vid src={n.src} dur={n.dur ?? 3} w={280} h={280} z={1.2} /> : <div style={{ fontFamily: V, fontWeight: 900, fontSize: 110, color: "#fff" }}>{(n as any).big ?? "✓"}</div>}
         </div>
         <div style={{ fontFamily: V, fontWeight: 900, fontSize: 64, color: "#fff", marginTop: 18 }}>{n.label}</div>
         <div style={{ fontFamily: V, fontWeight: 500, fontSize: 44, color: n.red ? RED : "#aaa" }}>{n.sub}</div>
