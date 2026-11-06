@@ -4,6 +4,7 @@ import { Reel, ReelProps } from "./Reel";
 import { Story, StoryProps } from "./Story";
 import { Clip, ClipProps } from "./Clip";
 import { Chat, ChatProps } from "./Chat";
+import { Collage, CollageProps } from "./Collage";
 import { Tips, TipsProps } from "./Tips";
 import { Editorial, EditorialProps } from "./Editorial";
 
@@ -39,6 +40,16 @@ export const Root: React.FC = () => (
     durationInFrames={60 * FPS}
     defaultProps={{ shots: [], lines: [], pops: [], hook: "", title: "", credit: "", seconds: 10 } as ClipProps}
     calculateMetadata={({ props }) => ({ durationInFrames: Math.ceil((props as ClipProps).seconds * FPS) })}
+  />
+  <Composition
+    id="Collage"
+    component={Collage}
+    fps={FPS}
+    width={1080}
+    height={1920}
+    durationInFrames={60 * FPS}
+    defaultProps={{ seconds: 10, lines: [], hot: [], scenes: [] } as CollageProps}
+    calculateMetadata={({ props }) => ({ durationInFrames: Math.ceil((props as CollageProps).seconds * FPS) })}
   />
   <Composition
     id="Chat"
