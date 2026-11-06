@@ -1,6 +1,6 @@
 // "Collage" reel: maximal editorial collage like the Pinterest references - textured backgrounds, stickers, UI mockups, kinetic type, chat-input typing.
 import React from "react";
-import { AbsoluteFill, interpolate, spring, useCurrentFrame, useVideoConfig } from "remotion";
+import { AbsoluteFill, Loop, OffthreadVideo, staticFile, interpolate, spring, useCurrentFrame, useVideoConfig } from "remotion";
 import { loadFont as vazir } from "@remotion/google-fonts/Vazirmatn";
 import { loadFont as lalezar } from "@remotion/google-fonts/Lalezar";
 import { Arrow, RED, TipLine } from "./Tips";
@@ -14,6 +14,7 @@ export type Item =
   | { t: "num"; at: number; text: string; x: number; y: number; color: string }
   | { t: "bubble"; at: number; text: string; x: number; y: number; w: number; typeTo?: number; dark?: boolean }
   | { t: "chat"; at: number; segs: { text: string; from: number; to: number; color?: string }[]; y?: number }
+  | { t: "video"; at: number; src: string; x: number; y: number; w: number; h: number; rot?: number; rate?: number; crack?: number; tape?: boolean; dur?: number }
   | { t: "arrow"; at: number; x: number; y: number }
   | { t: "handle"; at: number; y: number };
 export type CScene = { start: number; end: number; bg: "sky" | "felt" | "grid" | "mat" | "orange" | "black" | "white"; items: Item[] };
@@ -109,6 +110,27 @@ const Chat: React.FC<{ i: Extract<Item, { t: "chat" }> }> = ({ i }) => {
   </div>;
 };
 
+const VideoCard: React.FC<{ i: Extract<Item, { t: "video" }> }> = ({ i }) => {
+  const { t } = useT(); const { p, on } = usePop(i.at); if (!on) return null;
+  const c = i.crack !== undefined ? ease(t, i.crack, i.crack + 0.5) : 0;
+  const cr = [[0.5,0],[0.46,0.18],[0.54,0.34],[0.47,0.5],[0.55,0.68],[0.5,0.84],[0.52,1]];
+  const br = [[0.46,0.18,0.3,0.26],[0.54,0.34,0.7,0.3],[0.47,0.5,0.28,0.58],[0.55,0.68,0.74,0.74],[0.5,0.84,0.34,0.9]];
+  return <div style={{ position: "absolute", left: i.x, top: i.y, width: i.w, height: i.h, transform: `translate(-50%,0) rotate(${(i.rot ?? -3) + (1 - p) * 16}deg) scale(${0.5 + 0.5 * p})`, opacity: Math.min(1, p * 2),
+    border: "16px solid #fff", borderRadius: 30, overflow: "visible", boxShadow: "0 34px 80px rgba(0,0,0,.55)", background: "#000" }}>
+    <div style={{ position: "absolute", inset: 0, overflow: "hidden", borderRadius: 14 }}>
+      <Loop durationInFrames={Math.max(10, Math.floor((i.dur ?? 3) * 30))}><OffthreadVideo src={staticFile(i.src)} muted playbackRate={i.rate ?? 1} style={{ width: "100%", height: "100%", objectFit: "cover" }} /></Loop>
+      {i.crack !== undefined && (
+        <svg width="100%" height="100%" viewBox="0 0 100 100" preserveAspectRatio="none" style={{ position: "absolute", inset: 0 }}>
+          <polyline points={cr.map(([x, y]) => `${x * 100},${y * 100}`).join(" ")} fill="none" stroke="#fff" strokeWidth="1.2" strokeDasharray="200" strokeDashoffset={200 * (1 - c)} />
+          <polyline points={cr.map(([x, y]) => `${x * 100},${y * 100}`).join(" ")} fill="none" stroke="#111" strokeWidth="0.5" strokeDasharray="200" strokeDashoffset={200 * (1 - c)} />
+          {br.map(([x, y, x2, y2], k) => <line key={k} x1={x * 100} y1={y * 100} x2={x2 * 100} y2={y2 * 100} stroke="#fff" strokeWidth="0.7" strokeDasharray="60" strokeDashoffset={60 * (1 - c)} />)}
+        </svg>
+      )}
+    </div>
+    {i.tape && <div style={{ position: "absolute", left: "50%", top: -34, width: 220, height: 56, transform: "translateX(-50%) rotate(-4deg)", background: "rgba(255,212,0,.85)", boxShadow: "0 4px 12px rgba(0,0,0,.3)" }} />}
+  </div>;
+};
+
 const SceneView: React.FC<{ s: CScene }> = ({ s }) => {
   const { t } = useT();
   const inn = ease(t, s.start, s.start + 0.22), out = 1 - ease(t, s.end - 0.06, s.end + 0.16);
@@ -128,6 +150,7 @@ const SceneView: React.FC<{ s: CScene }> = ({ s }) => {
             case "num": return <Num key={k} i={it} />;
             case "bubble": return <Bubble key={k} i={it} />;
             case "chat": return <Chat key={k} i={it} />;
+            case "video": return <VideoCard key={k} i={it} />;
             case "arrow": return <Arrow key={k} at={it.at} x={it.x} y={it.y} />;
             case "handle": return <div key={k} style={{ position: "absolute", left: 0, right: 0, top: it.y, textAlign: "center", fontFamily: V, fontWeight: 900, fontSize: 70, color: "#fff", direction: "ltr", textShadow: "0 6px 24px rgba(0,0,0,.5)" }}>@techrooz_fa</div>;
           }
