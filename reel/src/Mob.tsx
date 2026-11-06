@@ -349,7 +349,7 @@ const Cta: React.FC<{ s: MScene }> = ({ s }) => {
   </Scene>);
 };
 
-const Brand: React.FC<{ total: number }> = ({ total }) => {
+export const Brand: React.FC<{ total: number }> = ({ total }) => {
   const f = useCurrentFrame(); const t = f / FPS;
   return (<>
     <div style={{ position: "absolute", left: 60, top: 235, display: "flex", alignItems: "center", gap: 14, direction: "rtl", fontFamily: V }}>
@@ -361,7 +361,7 @@ const Brand: React.FC<{ total: number }> = ({ total }) => {
   </>);
 };
 
-const EndCard: React.FC<{ start: number }> = ({ start }) => {
+export const EndCard: React.FC<{ start: number }> = ({ start }) => {
   const t = useCurrentFrame() / FPS - start; if (t < 0) return null;
   const p = pop(t, 0.1, 11), o = fade(t, 0, 0.2);
   return (<AbsoluteFill style={{ background: DK, opacity: o, fontFamily: V, direction: "rtl", alignItems: "center", justifyContent: "center" }}>
