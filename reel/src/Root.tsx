@@ -7,6 +7,7 @@ import { Chat, ChatProps } from "./Chat";
 import { Collage, CollageProps } from "./Collage";
 import { Lesson, LessonProps } from "./Lesson";
 import { Cinema, CinemaProps } from "./Cinema";
+import { Mob, MobProps } from "./Mob";
 import { Tips, TipsProps } from "./Tips";
 import { Editorial, EditorialProps } from "./Editorial";
 
@@ -53,6 +54,7 @@ export const Root: React.FC = () => (
     defaultProps={{ seconds: 10, lines: [], hot: [], scenes: [] } as CollageProps}
     calculateMetadata={({ props }) => ({ durationInFrames: Math.ceil((props as CollageProps).seconds * FPS) })}
   />
+  <Composition id="Mob" component={Mob} fps={FPS} width={1080} height={1920} durationInFrames={60 * FPS} defaultProps={{ seconds: 10, scenes: [] } as MobProps} calculateMetadata={({ props }) => ({ durationInFrames: Math.ceil((props as MobProps).seconds * FPS) })} />
   <Composition id="Lesson" component={Lesson} fps={FPS} width={1080} height={1920} durationInFrames={60 * FPS} defaultProps={{ seconds: 10, scenes: [] } as LessonProps} calculateMetadata={({ props }) => ({ durationInFrames: Math.ceil((props as LessonProps).seconds * FPS) })} />
   <Composition
     id="Cinema"
