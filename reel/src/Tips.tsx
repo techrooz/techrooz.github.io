@@ -12,6 +12,7 @@ export type TipScene = {
   start: number; end: number; kind: "hook" | "code" | "stamp" | "end";
   lead?: string; big?: string; code?: string; typeFrom?: number; typeTo?: number;
   result?: { at: number; title: string; rows: string[]; grid?: boolean }; stamp?: string;
+  card?: { at: number; title?: string; rows: string[] };
 };
 export type TipLine = { text: string; start: number; end: number };
 export type TipsProps = { scenes: TipScene[]; lines: TipLine[]; seconds: number; hot: string[] };
@@ -120,6 +121,21 @@ export const Arrow: React.FC<{ at: number; x: number; y: number; flip?: boolean 
   );
 };
 
+export const PromptCard: React.FC<{ card: NonNullable<TipScene["card"]> }> = ({ card }) => {
+  const { t } = useT();
+  const p = ease(t, card.at, card.at + 0.5);
+  return (
+    <div style={{ position: "absolute", left: 70, right: 70, top: 950, direction: "rtl", opacity: p, transform: `translateY(${(1 - p) * 60}px) rotate(${(1 - p) * -3}deg)`,
+      background: "#fff", borderRadius: 40, padding: "44px 48px", boxShadow: "0 30px 70px rgba(0,0,0,.22)", border: "6px solid #111" }}>
+      <div style={{ fontFamily: V, fontWeight: 900, fontSize: 42, color: "#fff", background: RED, display: "inline-block", padding: "2px 26px", borderRadius: 99, marginBottom: 22 }}>{card.title || "✅ پرامپت"}</div>
+      {card.rows.map((r, i) => {
+        const q = ease(t, card.at + 0.25 + i * 0.35, card.at + 0.7 + i * 0.35);
+        return <div key={i} style={{ fontFamily: V, fontWeight: 800, fontSize: 56, lineHeight: 1.5, color: "#111", opacity: q, transform: `translateX(${(1 - q) * 30}px)` }}>{r}</div>;
+      })}
+    </div>
+  );
+};
+
 const Scene: React.FC<{ s: TipScene }> = ({ s }) => {
   const { t } = useT();
   const inn = ease(t, s.start, s.start + 0.35), out = 1 - ease(t, s.end - 0.05, s.end + 0.3);
@@ -131,6 +147,7 @@ const Scene: React.FC<{ s: TipScene }> = ({ s }) => {
       {s.lead && <Reveal text={s.lead} at={s.start + 0.05} style={{ position: "absolute", top: s.kind === "code" ? 200 : 560, left: 60, right: 60, fontFamily: V, fontWeight: 300, fontSize: 58, color: "#444" }} />}
       {s.big && <Reveal ghost text={s.big} at={s.start + 0.3} style={{ position: "absolute", top: s.kind === "code" ? 270 : 640, left: 40, right: 40, fontFamily: L, fontSize: s.kind === "code" ? 120 : 190, lineHeight: 1.1, color: "#111" }} />}
       {s.kind === "code" && <Phone s={s} />}
+      {s.card && <PromptCard card={s.card} />}
       {s.stamp && <Stamp text={s.stamp} at={s.start + 0.6} x={s.kind === "code" ? 760 : 620} y={s.kind === "code" ? 470 : 1050} size={s.kind === "code" ? 230 : 300} />}
       {s.kind === "hook" && <Arrow at={s.start + 1.2} x={720} y={900} />}
       {s.kind === "end" && <Arrow at={s.start + 1.0} x={430} y={1000} />}
