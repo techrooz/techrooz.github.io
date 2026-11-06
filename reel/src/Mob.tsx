@@ -356,7 +356,7 @@ const Brand: React.FC<{ total: number }> = ({ total }) => {
       <div style={{ width: 64, height: 64, borderRadius: 18, background: GR, color: "#fff", fontWeight: 900, fontSize: 34, textAlign: "center", lineHeight: "64px", boxShadow: "0 8px 24px #14B8E688" }}>AI</div>
       <div style={{ fontWeight: 900, fontSize: 44, color: "#fff", mixBlendMode: "difference" }}>تک‌روز</div>
     </div>
-    <div style={{ position: "absolute", right: 60, top: 228, width: 78, height: 78, borderRadius: 39, border: "4px solid #14B8E6", overflow: "hidden", background: "#0B1026", boxShadow: "0 8px 24px #14B8E655" }}><Img src={staticFile("host_cut.png")} style={{ position: "absolute", width: 200, left: -62, top: -22 }} /></div>
+    <div style={{ position: "absolute", right: 60, top: 222, width: 92, height: 92, borderRadius: 46, border: "4px solid #14B8E6", overflow: "hidden", background: "#0B1026", boxShadow: "0 8px 24px #14B8E655" }}><Img src={staticFile("host_avatar.png")} style={{ width: "100%", height: "100%", objectFit: "cover" }} /></div>
     <div style={{ position: "absolute", left: 60, right: 60, top: 205, height: 6, borderRadius: 3, background: "#7f7f7f33" }}><div style={{ width: `${Math.min(100, (t / total) * 100)}%`, height: "100%", borderRadius: 3, background: GR }} /></div>
   </>);
 };
