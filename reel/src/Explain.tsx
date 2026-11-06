@@ -1,9 +1,8 @@
 // "Explain" reel: black bg, animated diagrams per sentence, word-by-word subtitles with blue highlights (style study: @alimoqdm.dev, colour swapped green->blue). Brand + EndCard from Mob.
 import React from "react";
 import { AbsoluteFill, Sequence, interpolate, spring, useCurrentFrame } from "remotion";
-import { loadFont as vazir } from "@remotion/google-fonts/Vazirmatn";
+import { V } from "./fontLocal";
 import { Brand, EndCard } from "./Mob";
-const V = vazir("normal", { weights: ["500", "800", "900"], subsets: ["arabic", "latin"] }).fontFamily;
 const FPS = 30, BL = "#3DA5FF", BG = "#08090D", GR = "linear-gradient(135deg,#7B5CFF,#14B8E6)";
 const cl = { extrapolateLeft: "clamp", extrapolateRight: "clamp" } as const;
 const FA = "۰۱۲۳۴۵۶۷۸۹"; const fa = (n: number | string) => String(n).replace(/\d/g, (d) => FA[+d]);
@@ -125,7 +124,7 @@ const Subs: React.FC<{ subs: ESub[] }> = ({ subs }) => {
   if (!cur || t > cur.e + 0.7) return null;
   const k = Math.min(1, (t - cur.s) * 10);
   return (<div style={{ position: "absolute", top: 1180, left: 60, right: 60, textAlign: "center", fontSize: 70, fontWeight: 900, lineHeight: 1.4, direction: "rtl", fontFamily: V, transform: `translateY(${(1 - k) * 18}px)`, opacity: k }}>
-    {cur.t.split(" ").map((w, i) => { const isA = (cur!.acc || []).some((a) => w.includes(a)); return <span key={i} style={{ margin: "0 11px", color: isA ? BL : "#fff", textShadow: isA ? `0 0 30px ${BL}99` : "0 4px 20px #000" }}>{w}</span>; })}
+    {cur.t.split(" ").map((w, i) => { const isA = (cur!.acc || []).some((a) => w.includes(a)); return <span key={i} style={{ display: "inline-block", margin: "0 11px", color: isA ? BL : "#fff", textShadow: isA ? `0 0 30px ${BL}99` : "0 4px 20px #000" }}>{w}</span>; })}
   </div>);
 };
 export const Explain: React.FC<ExplainProps> = ({ scenes, seconds, subs = [] }) => (

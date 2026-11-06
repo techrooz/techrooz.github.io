@@ -1,8 +1,7 @@
 // "Mob" reel: fast listicle, dark/light alternating, orange accent, UI mockups per beat (mgh.mobin-style analysis). No footage needed.
 import React from "react";
 import { AbsoluteFill, Img, Sequence, interpolate, spring, staticFile, useCurrentFrame } from "remotion";
-import { loadFont as vazir } from "@remotion/google-fonts/Vazirmatn";
-const V = vazir("normal", { weights: ["500", "800", "900"], subsets: ["arabic", "latin"] }).fontFamily;
+import { V } from "./fontLocal";
 const FPS = 30, CY = "#2BD0F0", VI = "#6A4CF0", DK = "#0B1026", LT = "#F2F5FF";
 const GR = "linear-gradient(135deg,#7B5CFF,#14B8E6)";
 const cl = { extrapolateLeft: "clamp", extrapolateRight: "clamp" } as const;
