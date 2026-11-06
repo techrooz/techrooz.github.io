@@ -1,6 +1,6 @@
 // "Mob" reel: fast listicle, dark/light alternating, orange accent, UI mockups per beat (mgh.mobin-style analysis). No footage needed.
 import React from "react";
-import { AbsoluteFill, Sequence, interpolate, spring, useCurrentFrame } from "remotion";
+import { AbsoluteFill, Img, Sequence, interpolate, spring, staticFile, useCurrentFrame } from "remotion";
 import { loadFont as vazir } from "@remotion/google-fonts/Vazirmatn";
 const V = vazir("normal", { weights: ["500", "800", "900"], subsets: ["arabic", "latin"] }).fontFamily;
 const FPS = 30, CY = "#2BD0F0", VI = "#6A4CF0", DK = "#0B1026", LT = "#F2F5FF";
@@ -9,7 +9,7 @@ const cl = { extrapolateLeft: "clamp", extrapolateRight: "clamp" } as const;
 const FA = "۰۱۲۳۴۵۶۷۸۹";
 const fa = (n: number | string) => String(n).replace(/\d/g, (d) => FA[+d]);
 
-export type MScene = { kind: "hook" | "intro" | "item" | "warn" | "cta"; start: number; end: number; n?: number; title?: string; acc?: string; mock?: "keys" | "apps" | "agents" | "phone" | "undo"; dark?: boolean; keyword?: string };
+export type MScene = { kind: "hook" | "hook2" | "intro" | "item" | "warn" | "cta"; start: number; end: number; n?: number; title?: string; acc?: string; mock?: "keys" | "apps" | "agents" | "phone" | "undo" | "text" | "scan" | "trans" | "look"; dark?: boolean; keyword?: string };
 export type MobProps = { seconds: number; scenes: MScene[] };
 
 const useT = () => useCurrentFrame() / FPS;
@@ -159,7 +159,82 @@ const Undo: React.FC<{ dark: boolean }> = ({ dark }) => {
   </>);
 };
 
-const MOCK = { keys: Keys, apps: Apps, agents: Agents, phone: Phone, undo: Undo };
+
+const Pill: React.FC<{ t0: number; children: React.ReactNode; dark: boolean; big?: boolean }> = ({ t0, children, dark, big }) => {
+  const t = useT();
+  return <div style={{ transform: `scale(${pop(t, t0)})`, background: dark ? "#ffffff14" : "#ffffff", border: `3px solid ${CY}`, color: dark ? "#fff" : "#161616", fontSize: big ? 50 : 34, fontWeight: 900, padding: "10px 26px", borderRadius: 50, boxShadow: "0 10px 30px #0003" }}>{children}</div>;
+};
+const Chips: React.FC<{ top: number; items: string[]; t0: number; dark: boolean }> = ({ top, items, t0, dark }) => (
+  <div style={{ position: "absolute", top, width: "100%", display: "flex", flexDirection: "row", justifyContent: "center", flexWrap: "wrap", gap: 16, padding: "0 30px" }}>{items.map((c, i) => <Pill key={c} t0={t0 + i * 0.35} dark={dark}>{c}</Pill>)}</div>
+);
+
+const TextCopy: React.FC<{ dark: boolean }> = ({ dark }) => {
+  const t = useT();
+  const sel = interpolate(t, [1.0, 1.8], [0, 100], cl);
+  return (<>
+    <Box x={110} y={400} w={860} h={420} t0={0.15} dark={dark} style={{ background: dark ? "#2a241c" : "#fff7e6" }}>
+      <div style={{ padding: "48px 50px", direction: "ltr", fontFamily: V }}>
+        <div style={{ fontSize: 44, fontWeight: 800, color: "#8a6d3b", letterSpacing: 4 }}>CAFE TECHROOZ</div>
+        <div style={{ marginTop: 34, display: "inline-block", position: "relative", fontSize: 62, fontWeight: 900, color: dark ? "#fff" : "#161616" }}>
+          <div style={{ position: "absolute", left: -8, top: 2, height: "100%", width: `${sel}%`, background: "#2D7BFF55", borderRadius: 8 }} />
+          <span style={{ position: "relative" }}>Wi-Fi: TechRooz2026</span>
+          {sel > 95 && <><div style={{ position: "absolute", left: -14, top: -14, width: 14, height: 80, background: "#2D7BFF", borderRadius: 7 }} /><div style={{ position: "absolute", right: -14, bottom: -14, width: 14, height: 80, background: "#2D7BFF", borderRadius: 7 }} /></>}
+        </div>
+        <div style={{ marginTop: 30, fontSize: 40, fontWeight: 500, color: "#8a6d3b" }}>Open 9:00 – 21:00</div>
+      </div>
+    </Box>
+    {t > 1.9 && <div style={{ position: "absolute", top: 860, width: "100%", display: "flex", justifyContent: "center", transform: `scale(${pop(t, 1.9)})` }}><div style={{ background: "#1c1c1e", color: "#fff", fontSize: 46, fontWeight: 800, padding: "14px 48px", borderRadius: 30, display: "flex", gap: 40 }}><span>کپی</span><span style={{ opacity: 0.5 }}>|</span><span style={{ opacity: 0.6 }}>اشتراک</span></div></div>}
+    {t > 2.8 && <div style={{ position: "absolute", top: 1000, width: "100%", textAlign: "center", fontSize: 64, fontWeight: 900, color: "#30d158", transform: `scale(${pop(t, 2.8)})` }}>✓ کپی شد</div>}
+    <Chips top={1090} items={["آیفون: لایو تکست", "اندروید: گوگل لنز"]} t0={3.3} dark={dark} />
+  </>);
+};
+
+const Scan: React.FC<{ dark: boolean }> = ({ dark }) => {
+  const t = useT(); const sw = interpolate(t, [0.8, 2.2], [0, 100], cl);
+  const done = t > 2.6;
+  return (<>
+    <Box x={290} y={400} w={500} h={600} t0={0.15} dark={false} style={{ transform: "rotate(-5deg)", background: "#fff" }}>
+      <div style={{ padding: "50px 44px" }}>{[0, 1, 2, 3, 4, 5, 6, 7, 8].map((i) => <div key={i} style={{ height: 22, width: `${i === 0 ? 55 : 100 - ((i * 13) % 30)}%`, background: i === 0 ? "#222" : "#d6d6d6", borderRadius: 11, marginBottom: 34 }} />)}</div>
+      <div style={{ position: "absolute", left: 0, right: 0, top: `${sw}%`, height: 8, background: CY, boxShadow: `0 0 40px ${CY}`, opacity: sw < 100 ? 1 : 0 }} />
+    </Box>
+    {[[260, 380], [760, 380], [260, 960], [760, 960]].map(([x, y], i) => <div key={i} style={{ position: "absolute", left: x, top: y, width: 60, height: 60, borderTop: i < 2 ? `8px solid ${CY}` : undefined, borderBottom: i >= 2 ? `8px solid ${CY}` : undefined, borderLeft: i % 2 === 0 ? `8px solid ${CY}` : undefined, borderRight: i % 2 === 1 ? `8px solid ${CY}` : undefined, opacity: fade(t, 0.3 + i * 0.1) }} />)}
+    {done && <div style={{ position: "absolute", left: 540 - 150, top: 1040, width: 300, height: 110, borderRadius: 30, background: GR, color: "#fff", fontSize: 72, fontWeight: 900, textAlign: "center", lineHeight: "120px", transform: `scale(${pop(t, 2.6)})`, boxShadow: "0 0 60px #14B8E688" }}>PDF ✓</div>}
+    <Chips top={1190} items={["آیفون: برنامه‌ی نوت", "اندروید: گوگل درایو"]} t0={3.2} dark={dark} />
+  </>);
+};
+
+const Trans: React.FC<{ dark: boolean }> = ({ dark }) => {
+  const t = useT(); const sw = t > 1.7;
+  return (<>
+    <Box x={90} y={420} w={900} h={560} t0={0.15} dark={dark} style={{ background: "linear-gradient(160deg,#1f3a5f,#0d1b2e)", border: `4px solid ${CY}` }}>
+      <div style={{ position: "absolute", top: 24, left: 30, display: "flex", gap: 14 }}>{["EN", "→", "FA"].map((x) => <div key={x} style={{ background: "#ffffff22", color: "#fff", fontSize: 36, fontWeight: 900, padding: "4px 20px", borderRadius: 16 }}>{x}</div>)}</div>
+      <div style={{ position: "absolute", top: 190, width: "100%", textAlign: "center", fontSize: 92, fontWeight: 900, color: "#fff", direction: "ltr", opacity: sw ? 0 : 1 }}>OPEN<br />24 HOURS</div>
+      <div style={{ position: "absolute", top: 210, width: "100%", textAlign: "center", fontSize: 96, fontWeight: 900, color: CY, opacity: sw ? fade(t, 1.7, 0.3) : 0, transform: `scale(${sw ? 0.9 + 0.1 * pop(t, 1.7) : 1})` }}>۲۴ ساعته<br />باز است</div>
+      <div style={{ position: "absolute", left: 0, right: 0, top: interpolate(t, [0.5, 1.6], [60, 500], cl), height: 6, background: CY, boxShadow: `0 0 30px ${CY}`, opacity: t < 1.7 ? 1 : 0 }} />
+    </Box>
+    <Chips top={1040} items={["رایگان", "آفلاین؛ بعد از دانلود زبان‌ها"]} t0={2.4} dark={dark} />
+  </>);
+};
+
+const Look: React.FC<{ dark: boolean }> = ({ dark }) => {
+  const t = useT(); const found = t > 1.8;
+  return (<>
+    <Box x={250} y={400} w={580} h={560} t0={0.15} dark={dark} style={{ background: dark ? "#16261c" : "#e8f5e9" }}>
+      <svg viewBox="0 0 400 400" width="100%" height="100%" style={{ position: "absolute", left: 0, top: 0 }}>
+        <path d="M200 360 C200 250 200 200 200 120" stroke="#2e7d32" strokeWidth="10" fill="none" />
+        <path d="M200 200 C110 190 70 130 80 70 C160 70 205 120 200 200Z" fill="#43a047" />
+        <path d="M200 160 C290 150 330 90 320 30 C240 30 195 80 200 160Z" fill="#66bb6a" />
+        <path d="M200 270 C120 270 80 220 90 170 C160 170 200 210 200 270Z" fill="#388e3c" />
+        <rect x="150" y="330" width="100" height="60" rx="10" fill="#8d6e63" />
+      </svg>
+      <div style={{ position: "absolute", inset: 40, border: `6px solid ${CY}`, borderRadius: 26, opacity: found ? 1 : 0.5 + 0.5 * Math.sin(t * 8) }} />
+    </Box>
+    {found && <div style={{ position: "absolute", top: 1000, width: "100%", display: "flex", justifyContent: "center", transform: `scale(${pop(t, 1.8)})` }}><div style={{ background: GR, color: "#fff", fontSize: 54, fontWeight: 900, padding: "14px 56px", borderRadius: 40 }}>گیاه شناسایی شد ✓</div></div>}
+    <Chips top={1130} items={["آیفون: ویژوال لوک‌آپ", "اندروید: گوگل لنز"]} t0={2.5} dark={dark} />
+  </>);
+};
+
+const MOCK = { keys: Keys, apps: Apps, agents: Agents, phone: Phone, undo: Undo, text: TextCopy, scan: Scan, trans: Trans, look: Look };
 
 const Item: React.FC<{ s: MScene }> = ({ s }) => {
   const dark = !!s.dark, M = MOCK[s.mock!];
@@ -176,6 +251,19 @@ const Hook: React.FC<{ s: MScene }> = ({ s }) => {
       <div style={{ padding: 24 }}>{files.map((f, i) => { const go = interpolate(t, [4 + i * 0.25, 4.5 + i * 0.25], [0, 1], cl); return <div key={f} style={{ height: 66, display: "flex", alignItems: "center", gap: 22, direction: "ltr", fontSize: 38, fontWeight: 800, color: "#fff", transform: `translateX(${go * 760}px)`, opacity: 1 - go }}><div style={{ width: 44, height: 44, borderRadius: 11, background: i % 2 ? CY : "#2f7cf6" }} />{f}</div>; })}</div>
     </Box>}
     {t > 5.6 && <div style={{ position: "absolute", top: 1380, width: "100%", display: "flex", justifyContent: "center", gap: 22 }}>{[1, 2, 3, 4, 5].map((n) => <div key={n} style={{ width: 150, height: 150, borderRadius: 34, background: n === 5 ? CY : "#242424", border: `3px solid ${n === 5 ? "#fff" : "#444"}`, color: "#fff", fontSize: 80, fontWeight: 900, textAlign: "center", lineHeight: "150px", transform: `scale(${pop(t, 5.6 + n * 0.22)})` }}>{fa(n)}</div>)}</div>}
+  </Scene>);
+};
+
+
+const Hook2: React.FC<{ s: MScene }> = () => {
+  const t = useT();
+  const z = interpolate(t, [0, 8], [1.05, 1.18], cl);
+  return (<Scene dark>
+    <AbsoluteFill style={{ overflow: "hidden" }}><Img src={staticFile("host_cam.png")} style={{ width: "100%", height: "100%", objectFit: "cover", transform: `scale(${z})` }} /></AbsoluteFill>
+    <AbsoluteFill style={{ background: "linear-gradient(180deg,#0B102699 0%,transparent 30%,transparent 55%,#0B1026ee 82%)" }} />
+    <div style={{ position: "absolute", top: 1180, width: "100%", textAlign: "center", fontSize: 120, fontWeight: 900, color: "#fff", transform: `scale(${pop(t, 0.2, 10)})`, textShadow: "0 10px 40px #000" }}>دوربین گوشیت</div>
+    <div style={{ position: "absolute", top: 1330, width: "100%", textAlign: "center", fontSize: 150, fontWeight: 900, color: CY, transform: `scale(${pop(t, 0.7, 10)})`, textShadow: `0 0 60px ${CY}88` }}>۴ کار مخفی</div>
+    <div style={{ position: "absolute", top: 1530, width: "100%", display: "flex", justifyContent: "center", gap: 22 }}>{[1, 2, 3, 4].map((n) => <div key={n} style={{ width: 120, height: 120, borderRadius: 30, background: n === 4 ? GR : "#ffffff22", border: "3px solid #ffffff88", color: "#fff", fontSize: 64, fontWeight: 900, textAlign: "center", lineHeight: "120px", transform: `scale(${pop(t, 3 + n * 0.5)})` }}>{fa(n)}</div>)}</div>
   </Scene>);
 };
 
@@ -212,8 +300,9 @@ const Cta: React.FC<{ s: MScene }> = ({ s }) => {
         <div style={{ marginTop: 44, fontSize: 56, fontWeight: 900, color: "#30d158", opacity: fade(t, 2.2) }}>✓ ارسال شد</div>
       </div>
     </Box>
+    <div style={{ position: "absolute", right: 70, top: 1330, width: 300, height: 400, borderRadius: 40, overflow: "hidden", border: "4px solid #14B8E6", transform: `scale(${pop(t, 1.0)}) rotate(4deg)`, boxShadow: "0 20px 60px #000a" }}><Img src={staticFile("host_crack.png")} style={{ width: "100%", height: "100%", objectFit: "cover", objectPosition: "50% 22%" }} /></div>
     <div style={{ position: "absolute", top: 1070, width: "100%", textAlign: "center", fontSize: 84, fontWeight: 900, color: "#fff", opacity: fade(t, 0.4) }}>کامنت کن: <span style={{ color: "var(--acc)" }}>«{kw}»</span></div>
-    <div style={{ position: "absolute", top: 1230, width: "100%", textAlign: "center", fontSize: 50, fontWeight: 800, color: "#ffffffaa", opacity: fade(t, 1.2) }}>تا نظرِ کامل تک‌روز رو برات بفرستم</div>
+    <div style={{ position: "absolute", top: 1230, width: "100%", textAlign: "center", fontSize: 50, fontWeight: 800, color: "#ffffffaa", opacity: fade(t, 1.2) }}>تا مراحل کامل رو برات بفرستم</div>
   </Scene>);
 };
 
@@ -224,6 +313,7 @@ const Brand: React.FC<{ total: number }> = ({ total }) => {
       <div style={{ width: 64, height: 64, borderRadius: 18, background: GR, color: "#fff", fontWeight: 900, fontSize: 34, textAlign: "center", lineHeight: "64px", boxShadow: "0 8px 24px #14B8E688" }}>AI</div>
       <div style={{ fontWeight: 900, fontSize: 44, color: "#fff", mixBlendMode: "difference" }}>تک‌روز</div>
     </div>
+    <div style={{ position: "absolute", right: 60, top: 228, width: 78, height: 78, borderRadius: 39, border: "4px solid #14B8E6", overflow: "hidden", background: "#0B1026", boxShadow: "0 8px 24px #14B8E655" }}><Img src={staticFile("host_cut.png")} style={{ position: "absolute", width: 200, left: -62, top: -22 }} /></div>
     <div style={{ position: "absolute", left: 60, right: 60, top: 205, height: 6, borderRadius: 3, background: "#7f7f7f33" }}><div style={{ width: `${Math.min(100, (t / total) * 100)}%`, height: "100%", borderRadius: 3, background: GR }} /></div>
   </>);
 };
@@ -246,7 +336,7 @@ export const Mob: React.FC<MobProps> = ({ scenes, seconds }) => (
   <AbsoluteFill style={{ backgroundColor: DK }}>
     {scenes.map((s, i) => (
       <Sequence key={i} from={Math.round(s.start * FPS)} durationInFrames={Math.max(1, Math.round((s.end - s.start) * FPS))}>
-        {s.kind === "hook" ? <Hook s={s} /> : s.kind === "intro" ? <Intro s={s} /> : s.kind === "item" ? <Item s={s} /> : s.kind === "warn" ? <Warn s={s} /> : <Cta s={s} />}
+        {s.kind === "hook" ? <Hook s={s} /> : s.kind === "hook2" ? <Hook2 s={s} /> : s.kind === "intro" ? <Intro s={s} /> : s.kind === "item" ? <Item s={s} /> : s.kind === "warn" ? <Warn s={s} /> : <Cta s={s} />}
       </Sequence>
     ))}
     <Brand total={seconds} />
