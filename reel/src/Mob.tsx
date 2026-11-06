@@ -9,7 +9,7 @@ const cl = { extrapolateLeft: "clamp", extrapolateRight: "clamp" } as const;
 const FA = "۰۱۲۳۴۵۶۷۸۹";
 const fa = (n: number | string) => String(n).replace(/\d/g, (d) => FA[+d]);
 
-export type MScene = { kind: "hook" | "hook2" | "intro" | "item" | "warn" | "cta"; start: number; end: number; n?: number; title?: string; acc?: string; mock?: "keys" | "apps" | "agents" | "phone" | "undo" | "text" | "scan" | "trans" | "look"; dark?: boolean; keyword?: string };
+export type MScene = { kind: "hook" | "hook2" | "hook3" | "hook4" | "intro" | "item" | "warn" | "cta"; start: number; end: number; n?: number; title?: string; acc?: string; mock?: "keys" | "apps" | "agents" | "phone" | "undo" | "prompt" | "text" | "scan" | "trans" | "look"; dark?: boolean; keyword?: string; prompt?: string; result?: string; note?: string; labels?: string[]; big?: string; sub?: string };
 export type MobProps = { seconds: number; scenes: MScene[] };
 
 const useT = () => useCurrentFrame() / FPS;
@@ -234,11 +234,11 @@ const Look: React.FC<{ dark: boolean }> = ({ dark }) => {
   </>);
 };
 
-const MOCK = { keys: Keys, apps: Apps, agents: Agents, phone: Phone, undo: Undo, text: TextCopy, scan: Scan, trans: Trans, look: Look };
+const MOCK = (): any => ({ keys: Keys, apps: Apps, agents: Agents, phone: Phone, prompt: PromptMock, undo: Undo, text: TextCopy, scan: Scan, trans: Trans, look: Look });
 
 const Item: React.FC<{ s: MScene }> = ({ s }) => {
-  const dark = !!s.dark, M = MOCK[s.mock!];
-  return (<Scene dark={dark}><Badge n={s.n!} dark={dark} /><M dark={dark} /><Title text={s.title!} acc={s.acc} dark={dark} /></Scene>);
+  const dark = !!s.dark, M = MOCK()[s.mock!];
+  return (<Scene dark={dark}><Badge n={s.n!} dark={dark} /><M dark={dark} s={s} /><Title text={s.title!} acc={s.acc} dark={dark} /></Scene>);
 };
 
 const Hook: React.FC<{ s: MScene }> = ({ s }) => {
@@ -264,6 +264,49 @@ const Hook2: React.FC<{ s: MScene }> = () => {
     <div style={{ position: "absolute", top: 1180, width: "100%", textAlign: "center", fontSize: 120, fontWeight: 900, color: "#fff", transform: `scale(${pop(t, 0.2, 10)})`, textShadow: "0 10px 40px #000" }}>دوربین گوشیت</div>
     <div style={{ position: "absolute", top: 1330, width: "100%", textAlign: "center", fontSize: 150, fontWeight: 900, color: CY, transform: `scale(${pop(t, 0.7, 10)})`, textShadow: `0 0 60px ${CY}88` }}>۴ کار مخفی</div>
     <div style={{ position: "absolute", top: 1530, width: "100%", display: "flex", justifyContent: "center", gap: 22 }}>{[1, 2, 3, 4].map((n) => <div key={n} style={{ width: 120, height: 120, borderRadius: 30, background: n === 4 ? GR : "#ffffff22", border: "3px solid #ffffff88", color: "#fff", fontSize: 64, fontWeight: 900, textAlign: "center", lineHeight: "120px", transform: `scale(${pop(t, 3 + n * 0.5)})` }}>{fa(n)}</div>)}</div>
+  </Scene>);
+};
+
+const Hook3: React.FC<{ s: MScene }> = () => {
+  const t = useT();
+  const labels = ["کپی متن", "اسکن PDF", "ترجمه", "شناخت"];
+  const sc = interpolate(t, [0.6, 3.2], [0, 100], cl);
+  return (<Scene dark>
+    <div style={{ position: "absolute", top: 340, width: "100%", textAlign: "center", fontSize: 360, fontWeight: 900, lineHeight: 1, color: CY, transform: `scale(${pop(t, 0.15, 9)})`, textShadow: `0 0 100px ${CY}88` }}>{fa(4)}</div>
+    <div style={{ position: "absolute", top: 720, width: "100%", textAlign: "center", fontSize: 110, fontWeight: 900, color: "#fff", opacity: fade(t, 0.5), transform: `translateY(${(1 - pop(t, 0.5)) * 40}px)` }}>کار مخفیِ <span style={{ color: CY }}>دوربین گوشی</span></div>
+    <Box x={340} y={900} w={400} h={460} t0={1.0} dark style={{ borderRadius: 56, border: "6px solid #5a6ea8" }}>
+      <div style={{ position: "absolute", inset: 38, border: `5px solid ${CY}`, borderRadius: 24 }} />
+      <div style={{ position: "absolute", left: 38, right: 38, top: `${12 + sc * 0.7}%`, height: 7, background: CY, boxShadow: `0 0 30px ${CY}` }} />
+      {[0, 1, 2, 3, 4].map((i) => <div key={i} style={{ position: "absolute", left: 80, right: 80 - (i % 2) * 60, top: 90 + i * 60, height: 16, borderRadius: 8, background: "#ffffff30" }} />)}
+    </Box>
+    <div style={{ position: "absolute", top: 1420, width: "100%", display: "flex", justifyContent: "center", gap: 18 }}>{labels.map((l, i) => <div key={l} style={{ transform: `scale(${pop(t, 3.4 + i * 0.45)})`, background: i === 3 ? GR : "#ffffff18", border: "3px solid #ffffff55", color: "#fff", fontSize: 36, fontWeight: 900, padding: "12px 22px", borderRadius: 30 }}>{fa(i + 1)} · {l}</div>)}</div>
+  </Scene>);
+};
+
+const PromptMock: React.FC<{ s: MScene; dark: boolean }> = ({ s, dark }) => {
+  const t = useT(); const txt = s.prompt || "";
+  const n = Math.floor(interpolate(t, [0.5, 2.6], [0, txt.length], cl));
+  const bars = [90, 70, 82, 55];
+  return (<>
+    <div style={{ position: "absolute", right: 90, top: 400, width: 800, minHeight: 190, borderRadius: "40px 40px 8px 40px", background: GR, color: "#fff", padding: "34px 40px", fontSize: 52, fontWeight: 800, lineHeight: 1.5, transform: `scale(${pop(t, 0.15)})`, transformOrigin: "100% 0", boxShadow: "0 20px 50px #14B8E655" }}>{txt.slice(0, n)}<span style={{ opacity: Math.floor(t * 3) % 2 ? 1 : 0 }}>|</span></div>
+    <Box x={90} y={720} w={820} h={330} t0={2.8} dark={dark} style={{ borderRadius: "8px 40px 40px 40px" }}>
+      <div style={{ padding: "38px 44px" }}>
+        <div style={{ display: "flex", alignItems: "center", gap: 16, marginBottom: 26 }}><div style={{ width: 54, height: 54, borderRadius: 16, background: GR, color: "#fff", fontWeight: 900, fontSize: 28, textAlign: "center", lineHeight: "54px" }}>AI</div><div style={{ fontSize: 34, fontWeight: 800, color: dark ? "#ffffffaa" : "#555" }}>پاسخ</div></div>
+        {bars.map((w, i) => <div key={i} style={{ height: 20, width: `${interpolate(t, [3.0 + i * 0.25, 3.5 + i * 0.25], [0, w], cl)}%`, background: dark ? "#ffffff30" : "#d8dff0", borderRadius: 10, marginBottom: 22, marginLeft: "auto" }} />)}
+      </div>
+    </Box>
+    {t > 4.1 && <div style={{ position: "absolute", top: 1085, width: "100%", display: "flex", justifyContent: "center", gap: 18, flexWrap: "wrap", padding: "0 30px", transform: `scale(${pop(t, 4.1)})` }}><div style={{ background: "#30d158", color: "#fff", fontSize: 50, fontWeight: 900, padding: "12px 40px", borderRadius: 40 }}>✓ {s.result}</div></div>}
+    {s.note && t > 5.0 && <div style={{ position: "absolute", top: 1195, width: "100%", display: "flex", justifyContent: "center", transform: `scale(${pop(t, 5.0)})` }}><div style={{ background: "#ffb02e", color: "#161616", fontSize: 42, fontWeight: 900, padding: "10px 36px", borderRadius: 36 }}>⚠ {s.note}</div></div>}
+  </>);
+};
+
+const Hook4: React.FC<{ s: MScene }> = ({ s }) => {
+  const t = useT(); const labels = s.labels || [];
+  return (<Scene dark>
+    <div style={{ position: "absolute", top: 340, width: "100%", textAlign: "center", fontSize: 360, fontWeight: 900, lineHeight: 1, color: CY, transform: `scale(${pop(t, 0.15, 9)})`, textShadow: `0 0 100px ${CY}88` }}>{s.big}</div>
+    <div style={{ position: "absolute", top: 720, width: "100%", textAlign: "center", fontSize: 108, fontWeight: 900, color: "#fff", opacity: fade(t, 0.5), transform: `translateY(${(1 - pop(t, 0.5)) * 40}px)` }}>{s.title}</div>
+    <div style={{ position: "absolute", top: 880, width: "100%", textAlign: "center", fontSize: 64, fontWeight: 800, color: "#ffffffbb", opacity: fade(t, 1.4) }}>{s.sub}</div>
+    <div style={{ position: "absolute", top: 1010, width: "100%", padding: "0 60px", display: "flex", flexDirection: "column", gap: 18 }}>{labels.map((l, i) => <div key={l} style={{ transform: `scale(${pop(t, 2.2 + i * 0.45)})`, background: i === labels.length - 1 ? GR : "#ffffff14", border: "3px solid #ffffff44", color: "#fff", fontSize: 48, fontWeight: 900, padding: "12px 34px", borderRadius: 30, display: "flex", gap: 24 }}><span style={{ color: i === labels.length - 1 ? "#fff" : CY }}>{fa(i + 1)}</span><span>{l}</span></div>)}</div>
   </Scene>);
 };
 
@@ -336,7 +379,7 @@ export const Mob: React.FC<MobProps> = ({ scenes, seconds }) => (
   <AbsoluteFill style={{ backgroundColor: DK }}>
     {scenes.map((s, i) => (
       <Sequence key={i} from={Math.round(s.start * FPS)} durationInFrames={Math.max(1, Math.round((s.end - s.start) * FPS))}>
-        {s.kind === "hook" ? <Hook s={s} /> : s.kind === "hook2" ? <Hook2 s={s} /> : s.kind === "intro" ? <Intro s={s} /> : s.kind === "item" ? <Item s={s} /> : s.kind === "warn" ? <Warn s={s} /> : <Cta s={s} />}
+        {s.kind === "hook" ? <Hook s={s} /> : s.kind === "hook2" ? <Hook2 s={s} /> : s.kind === "hook3" ? <Hook3 s={s} /> : s.kind === "hook4" ? <Hook4 s={s} /> : s.kind === "intro" ? <Intro s={s} /> : s.kind === "item" ? <Item s={s} /> : s.kind === "warn" ? <Warn s={s} /> : <Cta s={s} />}
       </Sequence>
     ))}
     <Brand total={seconds} />
