@@ -8,7 +8,8 @@ const FPS = 30, BL = "#3DA5FF", BG = "#08090D", GR = "linear-gradient(135deg,#7B
 const cl = { extrapolateLeft: "clamp", extrapolateRight: "clamp" } as const;
 const FA = "۰۱۲۳۴۵۶۷۸۹"; const fa = (n: number | string) => String(n).replace(/\d/g, (d) => FA[+d]);
 export type EScene = { start: number; end: number; vis: string; text: string; acc?: string[]; tag?: string; keyword?: string };
-export type ExplainProps = { seconds: number; scenes: EScene[] };
+export type ESub = { s: number; e: number; t: string; acc?: string[] };
+export type ExplainProps = { seconds: number; scenes: EScene[]; subs?: ESub[] };
 const useT = () => useCurrentFrame() / FPS;
 const pop = (t: number, t0: number, d = 14) => (t < t0 ? 0 : spring({ frame: (t - t0) * FPS, fps: FPS, config: { damping: d, stiffness: 170 } }));
 const ease = (x: number) => 1 - Math.pow(1 - Math.min(1, Math.max(0, x)), 3);
@@ -64,8 +65,51 @@ const Vis8: React.FC = () => { const t = useT(); const on = t > 1.6; const k = e
     <div style={{ fontSize: 54, fontWeight: 900, color: "#fff" }}>محدود کردن شارژ</div>
     <div style={{ width: 150, height: 84, borderRadius: 42, background: on ? BL : "#ffffff33", position: "relative", boxShadow: on ? `0 0 40px ${BL}` : undefined }}><div style={{ position: "absolute", top: 8, left: 8 + 66 * (on ? k : 0), width: 68, height: 68, borderRadius: 34, background: "#fff" }} /></div></div>
   {on && <div style={{ marginTop: 40, textAlign: "center", fontSize: 150, fontWeight: 900, color: BL, transform: `scale(${pop(t, 2)})`, textShadow: `0 0 60px ${BL}88` }}>{fa(80)}٪</div>}</div>); };
+
+// ---- iso helpers ----
+const iso = (x: number, y: number, z: number, S = 1, ox = 540, oy = 800) => [ox + (x - y) * 0.866 * S, oy + (x + y) * 0.5 * S - z * S];
+const IsoBox: React.FC<{ x: number; y: number; w: number; d: number; h: number; c?: [string, string, string]; S?: number; ox?: number; oy?: number; glow?: string }> = ({ x, y, w, d, h, c = ["#8fcbff", "#3d8fe0", "#245fa8"], S = 1, ox = 540, oy = 800, glow }) => {
+  const P = (a: number, b: number, z: number) => iso(a, b, z, S, ox, oy).join(",");
+  return (<g style={glow ? { filter: `drop-shadow(0 0 18px ${glow}88)` } : undefined}>
+    <polygon points={`${P(x, y, h)} ${P(x + w, y, h)} ${P(x + w, y + d, h)} ${P(x, y + d, h)}`} fill={c[0]} />
+    <polygon points={`${P(x, y + d, h)} ${P(x + w, y + d, h)} ${P(x + w, y + d, 0)} ${P(x, y + d, 0)}`} fill={c[1]} />
+    <polygon points={`${P(x + w, y, h)} ${P(x + w, y + d, h)} ${P(x + w, y + d, 0)} ${P(x + w, y, 0)}`} fill={c[2]} />
+  </g>);
+};
+const BLUE: [string, string, string] = ["#8fcbff", "#3d8fe0", "#245fa8"], RED: [string, string, string] = ["#ff9a9a", "#e04a4a", "#a82a2a"], GRY: [string, string, string] = ["#c9ced8", "#8b93a3", "#5d6577"];
+const IsoBars: React.FC<{ hs: number[]; shown?: number; color?: [string, string, string]; label?: string }> = ({ hs, shown = 99, color = BLUE, label }) => (<>
+  <svg width="1080" height="1920" style={{ position: "absolute", inset: 0 }}>
+    <polygon points={[iso(-30, -30, 0, 1, 540, 700), iso(hs.length * 80 + 10, -30, 0, 1, 540, 700), iso(hs.length * 80 + 10, 170, 0, 1, 540, 700), iso(-30, 170, 0, 1, 540, 700)].map((p) => p.join(",")).join(" ")} fill="#11141c" stroke="#ffffff22" strokeWidth={3} />
+    {hs.slice(0, shown).map((h, i) => <IsoBox key={i} x={i * 80} y={20} w={56} d={90} h={h} c={color} oy={700} glow={color[1]} />)}
+  </svg>
+  {label && <div style={{ position: "absolute", top: 960, width: "100%", textAlign: "center", fontFamily: V, fontSize: 52, fontWeight: 900, color: BL }}>{label}</div>}</>);
+const Vbars: React.FC = () => { const t = useT(); return <IsoBars hs={[260, 260, 260, 260, 260, 260, 260, 260]} shown={Math.ceil(t * 3)} label="جریان: ثابت و زیاد" />; };
+const Vshrink: React.FC = () => { const t = useT(); const hs = [260, 220, 180, 140, 105, 75, 50, 30].map((h, i) => (t > i * 0.45 ? h : 260)); return <IsoBars hs={hs} label="جریان: کم‌کم کمتر" />; };
+const Vtwo: React.FC = () => { const t = useT(); return (<svg width="1080" height="1920" style={{ position: "absolute", inset: 0 }}>
+  <g opacity={Math.min(1, t * 3)}><IsoBox x={-260} y={0} w={200} d={200} h={170} c={BLUE} oy={760} glow={BL} /></g>
+  <g opacity={Math.min(1, Math.max(0, t - 0.8) * 3)}><IsoBox x={60} y={0} w={200} d={200} h={170} c={GRY} oy={760} /></g>
+  <text x={300} y={880} fontSize={160} fontWeight={900} fill="#fff" fontFamily={V} opacity={Math.min(1, t * 3)}>۱</text>
+  <text x={640} y={880} fontSize={160} fontWeight={900} fill="#ffffffaa" fontFamily={V} opacity={Math.min(1, Math.max(0, t - 0.8) * 3)}>۲</text></svg>); };
+const Vdmg: React.FC = () => { const t = useT(); const sh = Math.sin(t * 40) * (t < 1.2 ? 6 : 0); return (<><svg width="1080" height="1920" style={{ position: "absolute", inset: 0, transform: `translateX(${sh}px)` }}><Battery pct={100} color="#ff5a5a" /><path d="M520 560 L560 640 L520 700 L580 790 L560 860" stroke="#fff" strokeWidth={10} fill="none" opacity={Math.min(1, Math.max(0, t - 0.5) * 3)} /></svg>
+  <div style={{ position: "absolute", top: 1000, width: "100%", textAlign: "center", fontSize: 76, fontWeight: 900, color: "#ff5a5a", fontFamily: V, transform: `scale(${pop(t, 0.7)})` }}>⚠ آسیب دیدن</div></>); };
+const Vflow: React.FC = () => { const t = useT(); return (<><svg width="1080" height="1920" style={{ position: "absolute", inset: 0 }}><Battery pct={Math.min(68, ease(t / 4) * 68)} x={380} y={600} w={440} />
+  <rect x={80} y={650} width={190} height={200} rx={30} fill="#1b1f2a" stroke={BL} strokeWidth={6} /><text x={175} y={775} textAnchor="middle" fill={BL} fontSize={100} fontWeight={900} fontFamily={V}>⚡</text>
+  {[0, 1, 2, 3].map((i) => <polygon key={i} points="0,-24 40,0 0,24" fill={BL} opacity={0.9} transform={`translate(${290 + ((t * 120 + i * 20) % 80)},750)`} />)}</svg>
+  <div style={{ position: "absolute", top: 960, width: "100%", textAlign: "center", fontFamily: V, fontSize: 48, fontWeight: 800, color: "#fff" }}>تا رسیدن ولتاژ به حدِ مجاز <span style={{ color: BL }}>({fa(4.2)}V)</span></div></>); };
+const Vvolt: React.FC = () => { const t = useT(); const u = ease(t / 2.4); return (<svg width="1080" height="1920" style={{ position: "absolute", inset: 0 }}>
+  <line x1={140} y1={1000} x2={940} y2={1000} stroke="#ffffff66" strokeWidth={4} /><line x1={140} y1={1000} x2={140} y2={520} stroke="#ffffff66" strokeWidth={4} />
+  <polyline points={`140,1000 340,600 ${340 + 600 * u},600`} fill="none" stroke={BL} strokeWidth={12} strokeLinecap="round" style={{ filter: `drop-shadow(0 0 16px ${BL})` }} />
+  <text x={640} y={560} textAnchor="middle" fill={BL} fontSize={60} fontWeight={900} fontFamily={V}>ولتاژ ثابت</text></svg>); };
+const Vtime: React.FC = () => { const t = useT(); const a = ease(t / 1.2), b = ease((t - 1.2) / 1.5); return (<div style={{ position: "absolute", left: 100, right: 100, top: 560, fontFamily: V }}>
+  <div style={{ fontSize: 46, fontWeight: 800, color: "#ffffffbb", marginBottom: 12 }}>مرحله‌ی ۱ (جریان ثابت)</div><div style={{ height: 70, width: `${a * 100}%`, background: BL, borderRadius: 18 }} />
+  <div style={{ fontSize: 46, fontWeight: 800, color: "#ffffffbb", margin: "50px 0 12px" }}>مرحله‌ی ۲ (ولتاژ ثابت)</div><div style={{ height: 70, width: `${Math.min(1, b) * 100}%`, background: "#8b93a3", borderRadius: 18 }} /></div>); };
+const Vtop: React.FC = () => { const t = useT(); return (<svg width="1080" height="1920" style={{ position: "absolute", inset: 0 }}><Battery pct={100} /><g transform={`translate(800,540) scale(${pop(t, 0.6)})`}><circle r={90} fill="#ff5a5a" /><path d="M-40 -40 L40 40 M40 -40 L-40 40" stroke="#fff" strokeWidth={22} strokeLinecap="round" /></g></svg>); };
+const Vtitle: React.FC = () => { const t = useT(); return (<><Glass lvl={0.15} /><div style={{ position: "absolute", top: 400, width: "100%", textAlign: "center", fontFamily: V, fontSize: 90, fontWeight: 900, color: BL, transform: `scale(${pop(t, 0.2)})` }}>یه مثال ساده</div></>); };
+const Vgfill: React.FC = () => <Glass lvl={0.15 + ease(useT() / 2.6) * 0.55} />;
+const Vgover: React.FC = () => { const t = useT(); return <Glass lvl={0.7 + 0.3 * ease(t / 2.2)} over={t > 2.4} />; };
+
 const Cta: React.FC<{ kw: string }> = ({ kw }) => { const t = useT(); const n = Math.floor(interpolate(t, [0.8, 2], [0, kw.length], cl)); return (<div style={{ position: "absolute", left: 140, right: 140, top: 520, fontFamily: V, transform: `scale(${pop(t, 0.15)})` }}><div style={{ background: "#14161d", border: "2px solid #ffffff22", borderRadius: 40, padding: 44 }}><div style={{ fontSize: 38, fontWeight: 800, color: "#ffffff88", direction: "ltr" }}>@techrooz.fa</div><div style={{ marginTop: 30, height: 120, borderRadius: 60, background: "#23262f", display: "flex", alignItems: "center", justifyContent: "space-between", padding: "0 40px", fontSize: 56, fontWeight: 900, color: "#fff" }}><div>{kw.slice(0, n)}<span style={{ color: BL, opacity: Math.floor(t * 3) % 2 }}>|</span></div><div style={{ width: 80, height: 80, borderRadius: 40, background: BL, color: "#fff", textAlign: "center", lineHeight: "80px" }}>↑</div></div><div style={{ marginTop: 36, fontSize: 52, fontWeight: 900, color: "#30d158", opacity: Math.min(1, Math.max(0, t - 2.3) * 4) }}>✓ ارسال شد</div></div></div>); };
-const VIS: Record<string, React.FC<any>> = { v1: Vis1, v2: Vis2, v3: Vis3, v4: Vis4, v5: Vis5, v6: Vis6, v7: Vis7, v8: Vis8 };
+const VIS: Record<string, React.FC<any>> = { v1: Vis1, v2: Vis2, v3: Vis3, v4: Vis4, v5: Vis5, v6: Vis6, v7: Vis7, v8: Vis8, bars: Vbars, shrink: Vshrink, two: Vtwo, dmg: Vdmg, flow: Vflow, volt: Vvolt, time: Vtime, top: Vtop, gtitle: Vtitle, gfill: Vgfill, gover: Vgover };
 
 const ScenePart: React.FC<{ s: EScene }> = ({ s }) => {
   const t = useT(); const dur = s.end - s.start; const V_ = VIS[s.vis]; const o = Math.min(1, t * 8);
@@ -73,12 +117,21 @@ const ScenePart: React.FC<{ s: EScene }> = ({ s }) => {
     <AbsoluteFill style={{ background: "radial-gradient(circle at 50% 40%,#3da5ff14,transparent 60%)" }} />
     <AbsoluteFill style={{ opacity: o }}>{V_ ? <V_ /> : <Cta kw={s.keyword || ""} />}</AbsoluteFill>
     {s.tag && <Tag label={s.tag} />}
-    <Sub text={s.text} acc={s.acc || []} dur={dur} />
   </AbsoluteFill>);
 };
-export const Explain: React.FC<ExplainProps> = ({ scenes, seconds }) => (
+const Subs: React.FC<{ subs: ESub[] }> = ({ subs }) => {
+  const t = useCurrentFrame() / FPS; let cur: ESub | undefined;
+  subs.forEach((x) => { if (t >= x.s) cur = x; });
+  if (!cur || t > cur.e + 0.7) return null;
+  const k = Math.min(1, (t - cur.s) * 10);
+  return (<div style={{ position: "absolute", top: 1180, left: 60, right: 60, textAlign: "center", fontSize: 70, fontWeight: 900, lineHeight: 1.4, direction: "rtl", fontFamily: V, transform: `translateY(${(1 - k) * 18}px)`, opacity: k }}>
+    {cur.t.split(" ").map((w, i) => { const isA = (cur!.acc || []).some((a) => w.includes(a)); return <span key={i} style={{ margin: "0 11px", color: isA ? BL : "#fff", textShadow: isA ? `0 0 30px ${BL}99` : "0 4px 20px #000" }}>{w}</span>; })}
+  </div>);
+};
+export const Explain: React.FC<ExplainProps> = ({ scenes, seconds, subs = [] }) => (
   <AbsoluteFill style={{ background: BG }}>
     {scenes.map((s, i) => <Sequence key={i} from={Math.round(s.start * FPS)} durationInFrames={Math.max(1, Math.round((s.end - s.start) * FPS))}><ScenePart s={s} /></Sequence>)}
+    <Subs subs={subs} />
     <Brand total={seconds} />
     <EndCard start={seconds - 1.9} />
   </AbsoluteFill>
