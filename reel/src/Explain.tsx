@@ -3,6 +3,7 @@ import React from "react";
 import { AbsoluteFill, Sequence, interpolate, spring, useCurrentFrame } from "remotion";
 import { V } from "./fontLocal";
 import { Brand, EndCard } from "./Mob";
+import { COLD } from "./ColdVis";
 const FPS = 30, BL = "#3DA5FF", BG = "#08090D", GR = "linear-gradient(135deg,#7B5CFF,#14B8E6)";
 const cl = { extrapolateLeft: "clamp", extrapolateRight: "clamp" } as const;
 const FA = "۰۱۲۳۴۵۶۷۸۹"; const fa = (n: number | string) => String(n).replace(/\d/g, (d) => FA[+d]);
@@ -108,13 +109,13 @@ const Vgfill: React.FC = () => <Glass lvl={0.15 + ease(useT() / 2.6) * 0.55} />;
 const Vgover: React.FC = () => { const t = useT(); return <Glass lvl={0.7 + 0.3 * ease(t / 2.2)} over={t > 2.4} />; };
 
 const Cta: React.FC<{ kw: string }> = ({ kw }) => { const t = useT(); const n = Math.floor(interpolate(t, [0.8, 2], [0, kw.length], cl)); return (<div style={{ position: "absolute", left: 140, right: 140, top: 520, fontFamily: V, transform: `scale(${pop(t, 0.15)})` }}><div style={{ background: "#14161d", border: "2px solid #ffffff22", borderRadius: 40, padding: 44 }}><div style={{ fontSize: 38, fontWeight: 800, color: "#ffffff88", direction: "ltr" }}>@techrooz.fa</div><div style={{ marginTop: 30, height: 120, borderRadius: 60, background: "#23262f", display: "flex", alignItems: "center", justifyContent: "space-between", padding: "0 40px", fontSize: 56, fontWeight: 900, color: "#fff" }}><div>{kw.slice(0, n)}<span style={{ color: BL, opacity: Math.floor(t * 3) % 2 }}>|</span></div><div style={{ width: 80, height: 80, borderRadius: 40, background: BL, color: "#fff", textAlign: "center", lineHeight: "80px" }}>↑</div></div><div style={{ marginTop: 36, fontSize: 52, fontWeight: 900, color: "#30d158", opacity: Math.min(1, Math.max(0, t - 2.3) * 4) }}>✓ ارسال شد</div></div></div>); };
-const VIS: Record<string, React.FC<any>> = { v1: Vis1, v2: Vis2, v3: Vis3, v4: Vis4, v5: Vis5, v6: Vis6, v7: Vis7, v8: Vis8, bars: Vbars, shrink: Vshrink, two: Vtwo, dmg: Vdmg, flow: Vflow, volt: Vvolt, time: Vtime, top: Vtop, gtitle: Vtitle, gfill: Vgfill, gover: Vgover };
+const VIS: Record<string, React.FC<any>> = { v1: Vis1, v2: Vis2, v3: Vis3, v4: Vis4, v5: Vis5, v6: Vis6, v7: Vis7, v8: Vis8, bars: Vbars, shrink: Vshrink, two: Vtwo, dmg: Vdmg, flow: Vflow, volt: Vvolt, time: Vtime, top: Vtop, gtitle: Vtitle, gfill: Vgfill, gover: Vgover, ...COLD };
 
 const ScenePart: React.FC<{ s: EScene }> = ({ s }) => {
   const t = useT(); const dur = s.end - s.start; const V_ = VIS[s.vis]; const o = Math.min(1, t * 8);
   return (<AbsoluteFill style={{ fontFamily: V, background: BG }}>
     <AbsoluteFill style={{ background: "radial-gradient(circle at 50% 40%,#3da5ff14,transparent 60%)" }} />
-    <AbsoluteFill style={{ opacity: o }}>{V_ ? <V_ /> : <Cta kw={s.keyword || ""} />}</AbsoluteFill>
+    <AbsoluteFill style={{ opacity: o, transform: `scale(${1 + 0.07 * Math.min(1, t / Math.max(1, dur))})`, transformOrigin: "50% 45%" }}>{V_ ? <V_ /> : <Cta kw={s.keyword || ""} />}</AbsoluteFill>
     {s.tag && <Tag label={s.tag} />}
   </AbsoluteFill>);
 };
