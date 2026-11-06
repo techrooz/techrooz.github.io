@@ -3,6 +3,7 @@ import { Composition } from "remotion";
 import { Reel, ReelProps } from "./Reel";
 import { Story, StoryProps } from "./Story";
 import { Clip, ClipProps } from "./Clip";
+import { Chat, ChatProps } from "./Chat";
 import { Tips, TipsProps } from "./Tips";
 import { Editorial, EditorialProps } from "./Editorial";
 
@@ -38,6 +39,16 @@ export const Root: React.FC = () => (
     durationInFrames={60 * FPS}
     defaultProps={{ shots: [], lines: [], pops: [], hook: "", title: "", credit: "", seconds: 10 } as ClipProps}
     calculateMetadata={({ props }) => ({ durationInFrames: Math.ceil((props as ClipProps).seconds * FPS) })}
+  />
+  <Composition
+    id="Chat"
+    component={Chat}
+    fps={FPS}
+    width={1080}
+    height={1920}
+    durationInFrames={60 * FPS}
+    defaultProps={{ seconds: 10, lines: [], hot: [], titles: [], bad: { user: "", bot: "", userAt: 0, botAt: 1, until: 2 }, segs: [{ at: 1, text: "", color: "#000", tag: "" }], buildFrom: 2, good: { at: 5, text: "" }, badTag: "", goodTag: "" } as ChatProps}
+    calculateMetadata={({ props }) => ({ durationInFrames: Math.ceil((props as ChatProps).seconds * FPS) })}
   />
   <Composition
     id="Tips"
