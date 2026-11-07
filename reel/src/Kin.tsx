@@ -5,7 +5,7 @@ import { V } from "./fontLocal";
 const FPS = 30; const OR = "#ff7a1a"; const CR = "#f0eade"; const CH = "#17181c";
 const ease = (x: number) => 1 - Math.pow(1 - Math.min(1, Math.max(0, x)), 3);
 const fa = (n: number) => String(Math.round(n)).replace(/\d/g, d => "۰۱۲۳۴۵۶۷۸۹"[+d]);
-export type KScene = { start: number; end: number; bg: "cream" | "dark"; text: string; hl?: string[]; img?: string; iz?: number; iy?: number; kind?: "count" | "toggle" | "cta"; a?: number; b?: number; label?: string; kw?: string };
+export type KScene = { start: number; end: number; bg: "cream" | "dark"; text: string; hl?: string[]; img?: string; iz?: number; iy?: number; kind?: "count" | "toggle" | "cta" | "list"; title?: string; sub?: string; note?: string; items?: string[]; cur?: number; a?: number; b?: number; label?: string; kw?: string };
 export type KProps = { seconds: number; scenes: KScene[] };
 const Words: React.FC<{ s: KScene; dur: number }> = ({ s, dur }) => {
   const t = useCurrentFrame() / FPS; const ws = s.text.split(" "); const dk = s.bg === "dark";
@@ -24,17 +24,26 @@ const Count: React.FC<{ s: KScene; dur: number }> = ({ s, dur }) => {
     {s.label && <div style={{ marginTop: 40, display: "inline-block", fontSize: 50, fontWeight: 800, color: "#fff", border: `3px solid ${OR}`, borderRadius: 40, padding: "6px 34px", opacity: ease((t - 0.6) / 0.4) }}>{s.label}</div>}
   </div>);
 };
-const Toggle: React.FC = () => {
+const Toggle: React.FC<{ s: KScene }> = ({ s }) => {
   const t = useCurrentFrame() / FPS; const k = ease(t / 0.4); const on = ease((t - 1.0) / 0.3);
   return (<div style={{ position: "absolute", left: 90, right: 90, top: 470, opacity: k, transform: `scale(${0.9 + 0.1 * k})`, fontFamily: V, direction: "rtl" }}>
     <div style={{ background: "#24262c", borderRadius: 48, padding: "56px 54px", border: "2px solid #ffffff1a", boxShadow: "0 30px 80px #0009" }}>
       <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
-        <div><div style={{ fontSize: 56, fontWeight: 900, color: "#fff" }}>شارژ بهینه</div><div style={{ fontSize: 34, fontWeight: 700, color: "#ffffff88", direction: "ltr", textAlign: "right", marginTop: 8 }}>Optimized Charging</div></div>
+        <div><div style={{ fontSize: 56, fontWeight: 900, color: "#fff" }}>{s.title ?? "شارژ بهینه"}</div><div style={{ fontSize: 34, fontWeight: 700, color: "#ffffff88", direction: "ltr", textAlign: "right", marginTop: 8 }}>{s.sub ?? "Optimized Charging"}</div></div>
         <div style={{ width: 190, height: 104, borderRadius: 52, background: on > 0.5 ? OR : "#555", position: "relative", boxShadow: on > 0.5 ? `0 0 50px ${OR}99` : "none" }}><div style={{ position: "absolute", top: 8, left: 8 + 86 * on, width: 88, height: 88, borderRadius: 44, background: "#fff" }} /></div>
       </div>
       <div style={{ marginTop: 40, height: 3, background: "#ffffff14" }} />
-      <div style={{ marginTop: 36, fontSize: 40, fontWeight: 700, color: "#ffffffb0", opacity: ease((t - 1.3) / 0.4) }}>شارژ تا ۸۰٪ سریع، بعدش آروم و امن</div>
+      <div style={{ marginTop: 36, fontSize: 40, fontWeight: 700, color: "#ffffffb0", opacity: ease((t - 1.3) / 0.4) }}>{s.note ?? "شارژ تا ۸۰٪ سریع، بعدش آروم و امن"}</div>
     </div></div>);
+};
+const List: React.FC<{ s: KScene }> = ({ s }) => {
+  const t = useCurrentFrame() / FPS; const items = s.items || []; const cur = s.cur ?? -1;
+  return (<div style={{ position: "absolute", left: 80, right: 80, top: 400, fontFamily: V, direction: "rtl" }}>
+    {items.map((it, i) => { const k = ease((t - 0.15 - i * 0.18) / 0.35); const on = i === cur;
+      return (<div key={i} style={{ display: "flex", alignItems: "center", gap: 28, marginBottom: 30, padding: "30px 36px", borderRadius: 40, opacity: k * (cur < 0 || on ? 1 : 0.35), transform: `translateX(${(1 - k) * 90}px) scale(${on ? 1.04 : 1})`, background: on ? "#2b2118" : "#24262c", border: `3px solid ${on ? OR : "#ffffff14"}`, boxShadow: on ? `0 0 60px ${OR}55` : "none" }}>
+        <div style={{ width: 84, height: 84, borderRadius: 42, background: on ? OR : "#3a3d45", color: "#fff", fontSize: 50, fontWeight: 900, textAlign: "center", lineHeight: "84px", flex: "none" }}>{fa(i + 1)}</div>
+        <div style={{ fontSize: 56, fontWeight: 900, color: "#fff", lineHeight: 1.3 }}>{it}</div></div>); })}
+  </div>);
 };
 const Cta: React.FC<{ s: KScene }> = ({ s }) => {
   const t = useCurrentFrame() / FPS; const k = ease(t / 0.4);
@@ -52,7 +61,8 @@ const Scn: React.FC<{ s: KScene }> = ({ s }) => {
     {s.img && <div style={{ position: "absolute", left: 0, right: 0, bottom: 0, height: 420, background: `linear-gradient(transparent,${CR} 25%)` }} />}
     {s.img && <div style={{ position: "absolute", right: 0, bottom: 0, width: 360, height: 380, background: CR }} />}
     {s.kind === "count" && <Count s={s} dur={dur} />}
-    {s.kind === "toggle" && <Toggle />}
+    {s.kind === "toggle" && <Toggle s={s} />}
+    {s.kind === "list" && <List s={s} />}
     {s.kind === "cta" && <Cta s={s} />}
     <Words s={s} dur={dur} />
   </AbsoluteFill>);
