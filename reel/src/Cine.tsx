@@ -111,14 +111,48 @@ const S3D: Record<string, React.FC<any>> = {
 const Over: React.FC<{ vis: string }> = ({ vis }) => {
   const C = COLD[vis]; return C ? <C /> : null;
 };
+const LV = ["سؤال ساده", "نقش دادن", "فایل و عکس", "ساخت پروژه", "کار خودکار"];
+const stepPos = (i: number): [number, number] => [(i - 2) * 0.82, -1.35 + (i + 1) * 0.2];
+const Stairs: React.FC<{ level: number; all?: boolean }> = ({ level, all }) => {
+  const t = useT(); const L = level;
+  const from = L <= 1 ? [-1.7, -0.95] : [stepPos(L - 2)[0], stepPos(L - 2)[1] * 1 + (L - 1) * 0.2 + 0.0];
+  const topY = (i: number) => -1.35 + (i + 1) * 0.4;
+  const to: [number, number] = L === 0 ? [-1.7, -0.95] : [stepPos(L - 1)[0], topY(L - 1) + 0.22];
+  const fr: [number, number] = L <= 1 ? [-1.7, -0.95] : [stepPos(L - 2)[0], topY(L - 2) + 0.22];
+  const k = L === 0 ? 1 : ease2((t - 0.15) / 0.9); const sx = fr[0] + (to[0] - fr[0]) * k; const sy = fr[1] + (to[1] - fr[1]) * k + Math.sin(k * Math.PI) * 0.7;
+  const cams = [0.2 + L * 0.0, 0.2 + L * 0.22]; 
+  return (<Canvas3D cam={[0.0 - t * 0.02, 0.9, 11.2 - Math.min(1, t / 4) * 0.8]} look={[0, -0.25, 0]} fov={40}>
+    <Lights a="#7ec8ff" b="#7b5cff" />
+    {[0, 1, 2, 3, 4].map((i) => { const lit = all ? i <= 1 : i < L; const cur = !all && i === L - 1; const col = lit ? ["#6A4CF0", "#5a6cf2", "#4a90f0", "#2fb0f0", "#2BD0F0"][i] : "#1b2030"; return (
+      <mesh key={i} position={[stepPos(i)[0], -1.35 + (i + 1) * 0.2, 0]}><boxGeometry args={[0.8, (i + 1) * 0.4, 1.4]} /><meshStandardMaterial color={col} emissive={col} emissiveIntensity={lit ? (cur ? 0.9 : 0.35) : 0} metalness={0.4} roughness={0.45} /></mesh>); })}
+    <mesh position={[sx, sy, 0.2]}><sphereGeometry args={[0.2, 24, 24]} /><meshStandardMaterial color="#bfefff" emissive="#3fd0ff" emissiveIntensity={3.2} /></mesh>
+    <pointLight position={[sx, sy + 0.3, 1]} intensity={2.2} color="#9fe0ff" distance={5} />
+    <Snow t={t} n={70} spread={8} />
+  </Canvas3D>);
+};
+const FAD = "ioabcdefghijklmnop";
+const LvOver: React.FC<{ n: number }> = ({ n }) => { const t = useT(); const k = ease(t / 0.5); const FA2 = "۰۱۲۳۴۵۶۷۸۹";
+  return (<div style={{ position: "absolute", top: 430, left: 0, right: 0, textAlign: "center", fontFamily: V, opacity: k, transform: `translateY(${(1 - k) * 20}px)` }}>
+    <div style={{ fontSize: 120, fontWeight: 900, color: "#fff", textShadow: "0 0 40px #2BD0F0aa" }}>سطح {FA2[n]}</div>
+    <div style={{ display: "inline-block", marginTop: 10, fontSize: 56, fontWeight: 900, padding: "6px 36px", borderRadius: 28, background: "linear-gradient(135deg,#6A4CF0,#2BD0F0)" }}>{LV[n - 1]}</div></div>); };
+const TitleOver: React.FC<{ a: string; b?: string }> = ({ a, b }) => { const t = useT(); const k = ease(t / 0.5);
+  return (<div style={{ position: "absolute", top: 430, left: 60, right: 60, textAlign: "center", fontFamily: V, opacity: k }}><div style={{ fontSize: 96, fontWeight: 900, color: "#fff", lineHeight: 1.3, textShadow: "0 0 40px #2BD0F0aa" }}>{a}</div>{b && <div style={{ display: "inline-block", marginTop: 12, fontSize: 56, fontWeight: 900, padding: "6px 36px", borderRadius: 28, background: "linear-gradient(135deg,#6A4CF0,#2BD0F0)" }}>{b}</div>}</div>); };
+const KwOver: React.FC = () => { const t = useT(); const kw = "سطح"; const n = Math.floor(interpolate(t, [0.8, 1.8], [0, kw.length], cl));
+  return (<div style={{ position: "absolute", left: 120, right: 120, top: 560, fontFamily: V, transform: `scale(${ease(t / 0.4)})` }}><div style={{ background: "#14161dee", border: "2px solid #ffffff22", borderRadius: 40, padding: 44 }}>
+    <div style={{ fontSize: 38, fontWeight: 800, color: "#ffffff99", direction: "rtl" }}>کامنت کن:</div>
+    <div style={{ fontSize: 96, fontWeight: 900, color: "#2BD0F0", direction: "rtl", minHeight: 130 }}>{kw.slice(0, n)}<span style={{ opacity: t % 0.8 < 0.4 ? 1 : 0 }}>|</span></div></div>
+    <div style={{ textAlign: "center", marginTop: 40, fontSize: 56, fontWeight: 900, color: "#fff", opacity: ease((t - 2) / 0.5) }}>۵ پرامپت آماده تو دایرکت 📩</div></div>); };
+const OVER: Record<string, React.FC<any>> = { st0: () => <TitleOver a="تو کدوم سطحی؟" b="۵ سطح هوش مصنوعی" />, st1: () => <LvOver n={1} />, st2: () => <LvOver n={2} />, st3: () => <LvOver n={3} />, st4: () => <LvOver n={4} />, st5: () => <LvOver n={5} />, stAll: () => <TitleOver a="بیشتر آدم‌ها" b="سطح ۱ و ۲" />, kw: KwOver };
+const S3D2: Record<string, React.FC<any>> = { st0: () => <Stairs level={0} />, st1: () => <Stairs level={1} />, st2: () => <Stairs level={2} />, st3: () => <Stairs level={3} />, st4: () => <Stairs level={4} />, st5: () => <Stairs level={5} />, stAll: () => <Stairs level={2} all />, kw: () => <Stairs level={5} /> };
+
 const Tag: React.FC<{ label: string }> = ({ label }) => { const t = useT(); return (<div style={{ position: "absolute", right: 60, top: 335, opacity: Math.min(1, t * 4), fontFamily: "monospace", fontSize: 24, fontWeight: 700, color: "#ffffff99", letterSpacing: 3, border: "1px solid #ffffff44", padding: "6px 14px", borderRadius: 6 }}>{label}</div>); };
 
 const ScenePart: React.FC<{ s: CScene }> = ({ s }) => {
-  const t = useT(); const S = S3D[s.vis]; const isOver = !S;
+  const t = useT(); const S = S3D[s.vis] || S3D2[s.vis]; const isOver = !S; const OV = OVER[s.vis];
   return (<AbsoluteFill style={{ background: BG, opacity: Math.min(1, t * 10) }}>
     {S ? <S /> : <Backdrop warm={s.vis === "pocket" || s.vis === "wait"} />}
     {isOver && <AbsoluteFill style={{ background: "linear-gradient(#06080ecc,#06080e66 60%,#06080ecc)" }}><Over vis={s.vis} /></AbsoluteFill>}
-    {s.tag && <Tag label={s.tag} />}
+    {OV && <OV />}{s.tag && <Tag label={s.tag} />}
   </AbsoluteFill>);
 };
 const Subs: React.FC<{ subs: CSub[] }> = ({ subs }) => {
