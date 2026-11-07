@@ -9,6 +9,7 @@ import { Lesson, LessonProps } from "./Lesson";
 import { Cinema, CinemaProps } from "./Cinema";
 import { Mob, MobProps } from "./Mob";
 import { Explain, ExplainProps } from "./Explain";
+import { Cine, CineProps } from "./Cine";
 import { Tips, TipsProps } from "./Tips";
 import { Editorial, EditorialProps } from "./Editorial";
 
@@ -55,6 +56,7 @@ export const Root: React.FC = () => (
     defaultProps={{ seconds: 10, lines: [], hot: [], scenes: [] } as CollageProps}
     calculateMetadata={({ props }) => ({ durationInFrames: Math.ceil((props as CollageProps).seconds * FPS) })}
   />
+  <Composition id="Cine" component={Cine} fps={FPS} width={1080} height={1920} durationInFrames={60 * FPS} defaultProps={{ seconds: 10, scenes: [] } as CineProps} calculateMetadata={({ props }) => ({ durationInFrames: Math.ceil((props as CineProps).seconds * FPS) })} />
   <Composition id="Explain" component={Explain} fps={FPS} width={1080} height={1920} durationInFrames={60 * FPS} defaultProps={{ seconds: 10, scenes: [] } as ExplainProps} calculateMetadata={({ props }) => ({ durationInFrames: Math.ceil((props as ExplainProps).seconds * FPS) })} />
   <Composition id="Mob" component={Mob} fps={FPS} width={1080} height={1920} durationInFrames={60 * FPS} defaultProps={{ seconds: 10, scenes: [] } as MobProps} calculateMetadata={({ props }) => ({ durationInFrames: Math.ceil((props as MobProps).seconds * FPS) })} />
   <Composition id="Lesson" component={Lesson} fps={FPS} width={1080} height={1920} durationInFrames={60 * FPS} defaultProps={{ seconds: 10, scenes: [] } as LessonProps} calculateMetadata={({ props }) => ({ durationInFrames: Math.ceil((props as LessonProps).seconds * FPS) })} />
