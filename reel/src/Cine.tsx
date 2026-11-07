@@ -145,7 +145,7 @@ const KwOver: React.FC = () => { const t = useT(); const kw = "سطح"; const n 
 const OVER: Record<string, React.FC<any>> = { st0: () => <TitleOver a="تو کدوم سطحی؟" b="۵ سطح هوش مصنوعی" />, st1: () => <LvOver n={1} />, st2: () => <LvOver n={2} />, st3: () => <LvOver n={3} />, st4: () => <LvOver n={4} />, st5: () => <LvOver n={5} />, stAll: () => <TitleOver a="بیشتر آدم‌ها" b="سطح ۱ و ۲" />, kw: KwOver };
 const S3D2: Record<string, React.FC<any>> = { st0: () => <Stairs level={0} />, st1: () => <Stairs level={1} />, st2: () => <Stairs level={2} />, st3: () => <Stairs level={3} />, st4: () => <Stairs level={4} />, st5: () => <Stairs level={5} />, stAll: () => <Stairs level={2} all />, kw: () => <Stairs level={5} /> };
 
-const Tag: React.FC<{ label: string }> = ({ label }) => { const t = useT(); return (<div style={{ position: "absolute", right: 60, top: 335, opacity: Math.min(1, t * 4), fontFamily: "monospace", fontSize: 24, fontWeight: 700, color: "#ffffff99", letterSpacing: 3, border: "1px solid #ffffff44", padding: "6px 14px", borderRadius: 6 }}>{label}</div>); };
+export const Tag: React.FC<{ label: string }> = ({ label }) => { const t = useT(); return (<div style={{ position: "absolute", right: 60, top: 335, opacity: Math.min(1, t * 4), fontFamily: "monospace", fontSize: 24, fontWeight: 700, color: "#ffffff99", letterSpacing: 3, border: "1px solid #ffffff44", padding: "6px 14px", borderRadius: 6 }}>{label}</div>); };
 
 const ScenePart: React.FC<{ s: CScene }> = ({ s }) => {
   const t = useT(); const S = S3D[s.vis] || S3D2[s.vis]; const isOver = !S; const OV = OVER[s.vis];
@@ -155,7 +155,7 @@ const ScenePart: React.FC<{ s: CScene }> = ({ s }) => {
     {OV && <OV />}{s.tag && <Tag label={s.tag} />}
   </AbsoluteFill>);
 };
-const Subs: React.FC<{ subs: CSub[] }> = ({ subs }) => {
+export const Subs: React.FC<{ subs: CSub[] }> = ({ subs }) => {
   const t = useCurrentFrame() / FPS; let cur: CSub | undefined; subs.forEach((x) => { if (t >= x.s) cur = x; });
   if (!cur || t > cur.e + 0.6) return null; const k = Math.min(1, (t - cur.s) * 12);
   return (<div style={{ position: "absolute", top: 1230, left: 0, right: 0, display: "flex", justifyContent: "center", opacity: k, transform: `translateY(${(1 - k) * 14}px)` }}>

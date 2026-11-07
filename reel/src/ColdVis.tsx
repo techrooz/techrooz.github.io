@@ -14,7 +14,7 @@ const Snow: React.FC<{ x: number; y: number; s?: number; o?: number }> = ({ x, y
     {[0, 60, 120].map((a) => <line key={a} x1={0} y1={-22} x2={0} y2={22} transform={`rotate(${a})`} />)}
   </g>);
 
-const Callout: React.FC<{ px: number; py: number; tx: number; ty: number; label: string; t0: number; color?: string }> = ({ px, py, tx, ty, label, t0, color = "#fff" }) => {
+export const Callout: React.FC<{ px: number; py: number; tx: number; ty: number; label: string; t0: number; color?: string }> = ({ px, py, tx, ty, label, t0, color = "#fff" }) => {
   const t = useT(); const k = ease((t - t0) / 0.5); if (k <= 0) return null;
   const ex = px + (tx - px) * k, ey = py + (ty - py) * k;
   return (<g opacity={Math.min(1, k * 2)}>
