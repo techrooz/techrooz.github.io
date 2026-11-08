@@ -144,6 +144,16 @@ code{display:block;white-space:pre-wrap;background:var(--bg2);padding:16px;borde
 footer{background:var(--bg2);margin-top:60px;padding:22px 0;color:var(--muted);font-size:12px}
 footer .wrap{display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px}footer a{color:var(--link)}
 .mbar{display:none}
+.logo{font-size:21px;font-weight:700;display:flex;align-items:center;gap:6px}.logo:before{content:"⚡";display:inline-block;animation:zap 1.2s ease-out .2s both}
+@keyframes zap{0%{opacity:0;transform:scale(.4) rotate(-20deg)}40%{opacity:1;transform:scale(1.35) rotate(8deg);filter:drop-shadow(0 0 10px #ffd60a)}100%{transform:none;filter:none}}
+.intro h1,.intro p,.intro a,.lead{animation:rise .8s cubic-bezier(.2,.7,.2,1) both}.intro p{animation-delay:.12s}.intro a{animation-delay:.22s}.lead{animation-delay:.32s}
+.big img{animation:settle 1.6s cubic-bezier(.2,.7,.2,1) .3s both}
+@keyframes rise{from{opacity:0;transform:translateY(22px)}to{opacity:1;transform:none}}
+@keyframes settle{from{transform:scale(1.08);filter:blur(6px)}to{transform:none;filter:none}}
+.rv{opacity:0;transform:translateY(26px);transition:opacity .7s ease,transform .7s cubic-bezier(.2,.7,.2,1)}.rv.in{opacity:1;transform:none}
+.card .ph img{transition:transform .6s cubic-bezier(.2,.7,.2,1)}.card:hover .ph img{transform:scale(1.06)}
+.prog{position:fixed;top:0;right:0;height:3px;background:var(--link);z-index:50;width:0}
+@media (prefers-reduced-motion:reduce){*,*:before{animation:none!important;transition:none!important}.rv{opacity:1;transform:none}}
 @media (max-width:820px){.grid{grid-template-columns:1fr 1fr}.side{grid-template-columns:1fr}.intro h1{font-size:36px}.big h2{font-size:26px}}
 @media (max-width:560px){.grid{grid-template-columns:1fr}.intro{padding:40px 0 18px}.intro h1{font-size:30px}.intro p{font-size:17px}
 .big{padding:30px 18px 0}.big h2{font-size:22px}.side h3{font-size:19px}article.post h1{font-size:27px}.sec h2{font-size:23px}
@@ -160,7 +170,7 @@ HEAD = """<!doctype html><html lang="fa" dir="rtl"><head><meta charset="utf-8">
 
 def header(root, on, today):
     cats = "".join(f'<a href="{root}c/{k}.html"' + (' class="on"' if k == on else "") + f">{n}</a>" for k, n, e, *_ in CATS)
-    return (f'<header class="top"><div class="wrap"><div class="bar"><a class="logo" href="{root}index.html">تک‌روز</a>'
+    return (f'<header class="top"><div class="wrap"><div class="bar"><a class="logo" href="{root}index.html" aria-label="تک‌روز">تک‌روز</a>'
             f'<span class="date">{today}</span><span class="sp"></span><a class="icon" href="{root}search.html" aria-label="جست‌وجو">🔍</a>'
             f'<a class="tg" href="{CHANNEL}">کانال تلگرام ↖</a></div><nav class="cats">{cats}</nav></div></header>')
 
@@ -172,6 +182,10 @@ FOOT = f"""<footer><div class="wrap"><div>⚡ تک‌روز · همه‌ی دن�
 <script>
 document.querySelectorAll('code').forEach(c=>{{const b=document.createElement('button');b.className='btn copy';b.textContent='📋 کپی';
 b.onclick=()=>navigator.clipboard.writeText(c.innerText).then(()=>b.textContent='✅ کپی شد');c.after(b)}});
+const io=new IntersectionObserver(es=>es.forEach(e=>{{if(e.isIntersecting){{e.target.classList.add('in');io.unobserve(e.target)}}}}),{{rootMargin:'0px 0px -8% 0px'}});
+document.querySelectorAll('.card,.sec,.join').forEach((el,i)=>{{el.classList.add('rv');el.style.transitionDelay=(i%3)*70+'ms';io.observe(el)}});
+if(document.querySelector('article.post')){{const pr=document.createElement('div');pr.className='prog';document.body.append(pr);
+addEventListener('scroll',()=>{{const h=document.documentElement;pr.style.width=(h.scrollTop/(h.scrollHeight-h.clientHeight)*100)+'%'}},{{passive:true}})}}
 const cl=document.querySelector('.copylink');if(cl)cl.onclick=()=>navigator.clipboard.writeText(location.href).then(()=>cl.textContent='✅ کپی شد');
 </script></body></html>"""
 
