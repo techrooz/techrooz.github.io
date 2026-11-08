@@ -10,6 +10,7 @@ from datetime import datetime, timedelta, timezone
 SITE_URL = "https://techrooz.github.io"
 INDEXNOW_KEY = "7c1e9f4a2b8d4e6f9a0b3c5d7e8f1a2b"  # public by design (IndexNow ownership file)
 CHANNEL = "https://t.me/techrooz_fa"
+INSTA = "https://www.instagram.com/techrooz.fa"
 ADMIN_TG = "mohammadsafari2222"
 EMAIL = "mohammadsfh11@gmail.com"
 TEH = timezone(timedelta(hours=3, minutes=30))
@@ -157,7 +158,15 @@ footer .wrap{display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px}
 @media (max-width:820px){.grid{grid-template-columns:1fr 1fr}.side{grid-template-columns:1fr}.intro h1{font-size:36px}.big h2{font-size:26px}}
 @media (max-width:560px){.grid{grid-template-columns:1fr}.intro{padding:40px 0 18px}.intro h1{font-size:30px}.intro p{font-size:17px}
 .big{padding:30px 18px 0}.big h2{font-size:22px}.side h3{font-size:19px}article.post h1{font-size:27px}.sec h2{font-size:23px}
-.mbar{display:block;position:fixed;bottom:14px;left:50%;transform:translateX(-50%);z-index:40;background:var(--link);color:#fff;padding:12px 22px;border-radius:999px;font-size:15px;white-space:nowrap;box-shadow:0 8px 24px rgba(0,0,0,.2)}body{padding-bottom:70px}}"""
+.mbar{display:block;position:fixed;bottom:14px;left:50%;transform:translateX(-50%);z-index:40;background:var(--link);color:#fff;padding:12px 22px;border-radius:999px;font-size:15px;white-space:nowrap;box-shadow:0 8px 24px rgba(0,0,0,.2)}body{padding-bottom:70px}}:root{--bg:#fafafa;--bg2:#f0f1f4;--text:#14161a;--muted:#6a7080;--line:#e1e3e8;--link:#e85d00;--card:#fff;--ring:#ffb27a}
+@media (prefers-color-scheme: dark){:root{--bg:#0d0f12;--bg2:#16191e;--text:#eceef2;--muted:#8f97a6;--line:#262a32;--link:#ff8a2b;--card:#14171c;--ring:#7a4116}}
+.logo:before{display:none!important}.logo img{width:32px;height:32px;border-radius:50%;object-fit:cover;box-shadow:0 0 0 2px var(--ring)}.ig{color:var(--text);font-weight:600;white-space:nowrap}
+.intro{padding:56px 0 28px}.intro .av{width:132px;height:132px;border-radius:50%;margin:0 auto 18px;object-fit:cover;box-shadow:0 0 0 4px var(--bg),0 0 0 8px var(--link),0 18px 40px rgba(232,93,0,.25)}
+.cta{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}.cta a{padding:11px 24px!important;border-radius:999px;font-size:16px!important;font-weight:700}.cta .b1{background:var(--link);color:#fff!important}.cta .b2{background:var(--bg2);color:var(--text)!important;border:1px solid var(--line)}
+.card{border:1px solid var(--line)}.card:hover{transform:translateY(-3px)!important;border-color:var(--link);box-shadow:0 10px 28px rgba(232,93,0,.12)!important}
+.kicker{color:var(--link)!important;font-weight:700}
+.join a{padding:12px 26px}.join .cta{margin-top:6px}.join .b1{background:var(--link);color:#fff}.join .b2{background:var(--bg);color:var(--text);border:1px solid var(--line)}
+"""
 
 HEAD = """<!doctype html><html lang="fa" dir="rtl"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#ffffff">
@@ -170,14 +179,14 @@ HEAD = """<!doctype html><html lang="fa" dir="rtl"><head><meta charset="utf-8">
 
 def header(root, on, today):
     cats = "".join(f'<a href="{root}c/{k}.html"' + (' class="on"' if k == on else "") + f">{n}</a>" for k, n, e, *_ in CATS)
-    return (f'<header class="top"><div class="wrap"><div class="bar"><a class="logo" href="{root}index.html" aria-label="تک‌روز">تک‌روز</a>'
+    return (f'<header class="top"><div class="wrap"><div class="bar"><a class="logo" href="{root}index.html" aria-label="تک‌روز"><img src="{root}assets/avatar.jpg" alt="">تک‌روز</a>'
             f'<span class="date">{today}</span><span class="sp"></span><a class="icon" href="{root}search.html" aria-label="جست‌وجو">🔍</a>'
-            f'<a class="tg" href="{CHANNEL}">کانال تلگرام ↖</a></div><nav class="cats">{cats}</nav></div></header>')
+            f'<a class="ig" href="{INSTA}">اینستاگرام</a><a class="tg" href="{CHANNEL}">تلگرام ↖</a></div><nav class="cats">{cats}</nav></div></header>')
 
 
 FOOT = f"""<footer><div class="wrap"><div>⚡ تک‌روز · همه‌ی دنیای تکنولوژی، به زبون ساده</div>
 <div>📩 تبلیغات و ارتباط: <a href="https://t.me/{ADMIN_TG}">@{ADMIN_TG}</a> · <a href="mailto:{EMAIL}">{EMAIL}</a></div>
-<div>📲 <a href="{CHANNEL}">@techrooz_fa</a></div></div></footer>
+<div>📲 <a href="{CHANNEL}">تلگرام</a> · <a href="{INSTA}">اینستاگرام @techrooz.fa</a></div></div></footer>
 <a class="mbar" href="{CHANNEL}">عضویت در کانال تلگرام</a>
 <script>
 document.querySelectorAll('code').forEach(c=>{{const b=document.createElement('button');b.className='btn copy';b.textContent='📋 کپی';
@@ -190,7 +199,7 @@ const cl=document.querySelector('.copylink');if(cl)cl.onclick=()=>navigator.clip
 </script></body></html>"""
 
 JOIN = f"""<section class="join"><h2>هر روز، داغ‌ترین‌ها.</h2><p>گیم، هوش مصنوعی، گجت و داستان‌های عجیب تکنولوژی.</p>
-<a href="{CHANNEL}">عضویت رایگان</a></section>"""
+<div class="cta"><a class="b1" href="{CHANNEL}">عضویت در تلگرام</a><a class="b2" href="{INSTA}">دنبال کردن در اینستاگرام</a></div></section>"""
 
 
 def media(p, root, cls=""):
@@ -275,8 +284,8 @@ def main(queue_path, site):
                 + "".join(overlay(p, "", "", "h3") for p in sides) + "</div></section>")
     shown = {p["slug"] for p in [] }
     tick = " ".join(f'<span><b>{CAT[p["cat"]][2]}</b> {E(p["title"])}</span>' for p in posts[:8])
-    intro = ('<section class="intro"><h1>تک‌روز</h1><p>همه‌ی دنیای تکنولوژی، به زبون ساده.</p>'
-             f'<a href="{CHANNEL}">عضویت در کانال تلگرام ‹</a></section>')
+    intro = ('<section class="intro"><img class="av" src="assets/avatar.jpg" alt="محمد، تک‌روز"><h1>تک‌روز</h1><p>هر روز یه ترفند هوش مصنوعی و تکنولوژی، به زبون ساده.</p>'
+             f'<div class="cta"><a class="b1" href="{CHANNEL}">عضویت در تلگرام</a><a class="b2" href="{INSTA}">اینستاگرام</a></div></section>')
     body = f'<div class="wrap">{intro}{lead}'
     body += '<div class="sec"><h2>تازه‌ترین‌ها</h2><a href="search.html">همه‌ی مطالب ←</a></div><div class="grid">' + "".join(card(p, "") for p in posts[:8]) + "</div>" + JOIN
     for k, n, e, c, _ in CATS:
