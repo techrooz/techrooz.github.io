@@ -6,7 +6,7 @@ const FPS = 30; const OR = "#ff7a1a"; const CR = "#f0eade"; const CH = "#17181c"
 const ease = (x: number) => 1 - Math.pow(1 - Math.min(1, Math.max(0, x)), 3);
 const fa = (n: number) => String(Math.round(n)).replace(/\d/g, d => "۰۱۲۳۴۵۶۷۸۹"[+d]);
 export type KScene = { start: number; end: number; bg: "cream" | "dark"; text: string; hl?: string[]; img?: string; iz?: number; iy?: number; kind?: "count" | "toggle" | "cta" | "list"; title?: string; sub?: string; note?: string; items?: string[]; cur?: number; a?: number; b?: number; label?: string; kw?: string };
-export type KProps = { seconds: number; scenes: KScene[] };
+export type KProps = { seconds: number; scenes: KScene[]; story?: boolean };
 const Words: React.FC<{ s: KScene; dur: number }> = ({ s, dur }) => {
   const t = useCurrentFrame() / FPS; const ws = s.text.split(" "); const dk = s.bg === "dark";
   const tot = ws.reduce((a, w) => a + w.length + 1, 0); let acc = 0;
@@ -67,13 +67,13 @@ const Scn: React.FC<{ s: KScene }> = ({ s }) => {
     <Words s={s} dur={dur} />
   </AbsoluteFill>);
 };
-const Brand: React.FC<{ total: number }> = ({ total }) => { const t = useCurrentFrame() / FPS; return (<>
-  <div style={{ position: "absolute", left: 60, right: 60, top: 205, height: 6, borderRadius: 3, background: "#7f7f7f33" }}><div style={{ width: `${Math.min(100, (t / total) * 100)}%`, height: "100%", borderRadius: 3, background: OR }} /></div>
+const Brand: React.FC<{ total: number; bar?: boolean }> = ({ total, bar = true }) => { const t = useCurrentFrame() / FPS; return (<>
+  {bar && <div style={{ position: "absolute", left: 60, right: 60, top: 205, height: 6, borderRadius: 3, background: "#7f7f7f33" }}><div style={{ width: `${Math.min(100, (t / total) * 100)}%`, height: "100%", borderRadius: 3, background: OR }} /></div>}
   <div style={{ position: "absolute", right: 60, top: 235, display: "flex", alignItems: "center", gap: 14, direction: "rtl", fontFamily: V }}><div style={{ width: 60, height: 60, borderRadius: 18, background: OR, color: "#fff", fontWeight: 900, fontSize: 32, textAlign: "center", lineHeight: "60px" }}>AI</div><div style={{ fontWeight: 900, fontSize: 44, color: "#fff", mixBlendMode: "difference" }}>تک‌روز</div></div></>); };
 const End: React.FC<{ start: number }> = ({ start }) => { const t = useCurrentFrame() / FPS - start; if (t < 0) return null; const k = ease(t / 0.4);
   return (<AbsoluteFill style={{ background: CH, opacity: Math.min(1, t * 8), fontFamily: V, direction: "rtl", alignItems: "center", justifyContent: "center" }}>
     <div style={{ textAlign: "center", transform: `scale(${0.8 + 0.2 * k})` }}><div style={{ width: 240, height: 240, margin: "0 auto", borderRadius: 66, background: OR, color: "#fff", fontWeight: 900, fontSize: 130, lineHeight: "240px", boxShadow: `0 0 110px ${OR}99` }}>AI</div>
       <div style={{ marginTop: 46, fontSize: 190, fontWeight: 900, color: "#fff", lineHeight: 1 }}>تک‌روز</div><div style={{ marginTop: 22, fontSize: 50, fontWeight: 800, color: "#ffffffaa" }}>هوش مصنوعی و تکنولوژی</div><div style={{ marginTop: 16, fontSize: 46, fontWeight: 800, color: OR, direction: "ltr" }}>@techrooz.fa</div></div></AbsoluteFill>); };
-export const Kin: React.FC<KProps> = ({ scenes, seconds }) => (<AbsoluteFill style={{ background: CH }}>
+export const Kin: React.FC<KProps> = ({ scenes, seconds, story }) => (<AbsoluteFill style={{ background: CH }}>
   {scenes.map((s, i) => (<Sequence key={i} from={Math.round(s.start * FPS)} durationInFrames={Math.max(1, Math.round((s.end - s.start) * FPS))}><Scn s={s} /></Sequence>))}
-  <Brand total={seconds} /><End start={seconds - 1.9} /></AbsoluteFill>);
+  <Brand total={seconds} bar={!story} />{!story && <End start={seconds - 1.9} />}</AbsoluteFill>);
