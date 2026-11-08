@@ -13,6 +13,7 @@ import { Cine, CineProps } from "./Cine";
 import { RenderReel, RProps } from "./RenderReel";
 import { Kin, KProps } from "./Kin";
 import { Iso, IProps } from "./Iso";
+import { Storage3D, TOTAL as ST_TOTAL } from "./Anim3D/StorageScene";
 import { Tips, TipsProps } from "./Tips";
 import { Editorial, EditorialProps } from "./Editorial";
 
@@ -106,5 +107,6 @@ export const Root: React.FC = () => (
     defaultProps={{ scenes: [], lines: [], seconds: 10, hot: [] } as EditorialProps}
     calculateMetadata={({ props }) => ({ durationInFrames: Math.ceil((props as EditorialProps).seconds * FPS) })}
   />
+    <Composition id="Storage3D" component={Storage3D} fps={FPS} width={1080} height={1920} durationInFrames={Math.round(ST_TOTAL * FPS)} defaultProps={{}} />
   </>
 );
