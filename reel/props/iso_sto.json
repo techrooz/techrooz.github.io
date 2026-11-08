@@ -1,0 +1,133 @@
+{
+ "seconds": 38.21,
+ "scenes": [
+  {
+   "start": 0,
+   "end": 7.36,
+   "img": "iso1.png",
+   "iz": 0.9,
+   "iy": 60,
+   "title": "۱۲۸ گیگ خریدی؛ بقیه‌ش کجا رفت؟",
+   "hl": [
+    "کجا"
+   ],
+   "sub": "You bought 128 GB. Where did the rest go?"
+  },
+  {
+   "start": 7.36,
+   "end": 15.39,
+   "img": "iso2.png",
+   "iz": 0.8,
+   "iy": 60,
+   "oy": 10,
+   "title": "۱۲۸ گیگ می‌شه ۱۱۹",
+   "hl": [
+    "۱۱۹"
+   ],
+   "sub": "1 GB = 1,000,000,000 bytes  →  about 119 GiB",
+   "labels": [
+    {
+     "x": 305,
+     "y": 720,
+     "text": "128 GB",
+     "c": "or"
+    },
+    {
+     "x": 775,
+     "y": 820,
+     "text": "119 GB",
+     "c": "cy"
+    }
+   ]
+  },
+  {
+   "start": 15.39,
+   "end": 19.56,
+   "img": "iso3.png",
+   "bg": "#171a1f",
+   "iz": 1.25,
+   "iy": -60,
+   "ox": 55,
+   "oy": 35,
+   "title": "قفسه‌ها رو دو جور اندازه می‌گیرن",
+   "hl": [
+    "دو"
+   ],
+   "sub": "Same warehouse, two different rulers"
+  },
+  {
+   "start": 19.56,
+   "end": 24.99,
+   "img": "iso4.png",
+   "iz": 0.95,
+   "iy": 0,
+   "title": "سیستم‌عامل هم سهم داره",
+   "hl": [
+    "سهم"
+   ],
+   "sub": "OS + pre-installed apps: roughly 10 to 20 GB",
+   "pills": [
+    "۱۰ تا ۲۰ گیگ"
+   ]
+  },
+  {
+   "start": 24.99,
+   "end": 27.88,
+   "img": "iso5.png",
+   "bg": "#12151a",
+   "iz": 0.82,
+   "iy": 30,
+   "oy": 10,
+   "title": "حدود ۱۰۰ گیگ مال خودته",
+   "hl": [
+    "۱۰۰"
+   ],
+   "sub": "128  →  119  →  ~100 GB",
+   "labels": [
+    {
+     "x": 380,
+     "y": 235,
+     "text": "128",
+     "c": "cy"
+    },
+    {
+     "x": 560,
+     "y": 465,
+     "text": "119",
+     "c": "cy"
+    },
+    {
+     "x": 745,
+     "y": 735,
+     "text": "~100",
+     "c": "or"
+    }
+   ]
+  },
+  {
+   "start": 27.88,
+   "end": 32.56,
+   "img": "iso6.png",
+   "iz": 1.05,
+   "iy": 50,
+   "ox": 45,
+   "oy": 30,
+   "title": "کَش و ویدیوهای سنگین رو پاک کن",
+   "hl": [
+    "کَش"
+   ],
+   "sub": "Clear app cache and big videos",
+   "pills": [
+    "تنظیمات",
+    "حافظه"
+   ]
+  },
+  {
+   "start": 32.56,
+   "end": 38.21,
+   "kind": "cta",
+   "title": "",
+   "kw": "حافظه"
+  }
+ ]
+}

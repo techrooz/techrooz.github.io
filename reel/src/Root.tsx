@@ -12,6 +12,7 @@ import { Explain, ExplainProps } from "./Explain";
 import { Cine, CineProps } from "./Cine";
 import { RenderReel, RProps } from "./RenderReel";
 import { Kin, KProps } from "./Kin";
+import { Iso, IProps } from "./Iso";
 import { Tips, TipsProps } from "./Tips";
 import { Editorial, EditorialProps } from "./Editorial";
 
@@ -60,6 +61,7 @@ export const Root: React.FC = () => (
   />
   <Composition id="Cine" component={Cine} fps={FPS} width={1080} height={1920} durationInFrames={60 * FPS} defaultProps={{ seconds: 10, scenes: [] } as CineProps} calculateMetadata={({ props }) => ({ durationInFrames: Math.ceil((props as CineProps).seconds * FPS) })} />
   <Composition id="RenderReel" component={RenderReel} fps={FPS} width={1080} height={1920} durationInFrames={60 * FPS} defaultProps={{ seconds: 10, scenes: [], subs: [] } as RProps} calculateMetadata={({ props }) => ({ durationInFrames: Math.ceil((props as RProps).seconds * FPS) })} />
+  <Composition id="Iso" component={Iso} fps={FPS} width={1080} height={1920} durationInFrames={40 * FPS} defaultProps={{ seconds: 10, scenes: [] } as IProps} calculateMetadata={({ props }) => ({ durationInFrames: Math.ceil((props as IProps).seconds * FPS) })} />
   <Composition id="Kin" component={Kin} fps={FPS} width={1080} height={1920} durationInFrames={40 * FPS} defaultProps={{ seconds: 10, scenes: [] } as KProps} calculateMetadata={({ props }) => ({ durationInFrames: Math.ceil((props as KProps).seconds * FPS) })} />
   <Composition id="Explain" component={Explain} fps={FPS} width={1080} height={1920} durationInFrames={60 * FPS} defaultProps={{ seconds: 10, scenes: [] } as ExplainProps} calculateMetadata={({ props }) => ({ durationInFrames: Math.ceil((props as ExplainProps).seconds * FPS) })} />
   <Composition id="Mob" component={Mob} fps={FPS} width={1080} height={1920} durationInFrames={60 * FPS} defaultProps={{ seconds: 10, scenes: [] } as MobProps} calculateMetadata={({ props }) => ({ durationInFrames: Math.ceil((props as MobProps).seconds * FPS) })} />
