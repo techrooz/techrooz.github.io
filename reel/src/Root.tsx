@@ -18,6 +18,7 @@ import { Talk } from "./Talk/Talk";
 import { T_TOTAL } from "./Talk/data";
 import { Traffic3D, TOTAL as TR_TOTAL } from "./Anim3D/TrafficScene";
 import { Internet3D, TOTAL as IN_TOTAL } from "./Anim3D/InternetScene";
+import { QR3D, TOTAL as QR_TOTAL } from "./Anim3D/QRScene";
 import { Tips, TipsProps } from "./Tips";
 import { Editorial, EditorialProps } from "./Editorial";
 
@@ -115,5 +116,6 @@ export const Root: React.FC = () => (
     <Composition id="Talk" component={Talk} fps={FPS} width={1080} height={1920} durationInFrames={Math.round(T_TOTAL * FPS)} defaultProps={{}} />
     <Composition id="Traffic3D" component={Traffic3D} fps={FPS} width={1080} height={1920} durationInFrames={Math.round(TR_TOTAL * FPS)} defaultProps={{}} />
     <Composition id="Internet3D" component={Internet3D} fps={FPS} width={1080} height={1920} durationInFrames={Math.round(IN_TOTAL * FPS)} defaultProps={{}} />
+    <Composition id="QR3D" component={QR3D} fps={FPS} width={1080} height={1920} durationInFrames={Math.round(QR_TOTAL * FPS)} defaultProps={{}} />
   </>
 );
