@@ -1,17 +1,5 @@
 [
  {
-  "at": "2026-11-03T04:30:00Z",
-  "cat": "news",
-  "photo": "https://fdn.gsmarena.com/imgroot/news/26/11/spacex-boost-mobile-talks/-952x498w6/gsmarena_000.jpg",
-  "source": "https://www.gsmarena.com/elon_musks_spacex_may_buy_boost_mobile_to_make_starlink_into_a_fullfledged_carrier-news-75317.php",
-  "caption": "🛰 <b>ایلان ماسک می‌خواد اپراتور موبایل بخره!</b>\n\nطبق یه گزارش تازه، اسپیس‌ایکس با شرکت مادر «بوست موبایل» (EchoStar) مذاکره کرده؛ یا برای خرید کاملش، یا برای استفاده از شبکه‌ش. ماسک مهرماه شخصاً با رئیس EchoStar دیدار کرده.\n\nچرا؟ استارلینک می‌خواد یه اپراتور کامل در آمریکا بشه، ولی سیگنال ماهواره توی خونه و شهر ضعیفه. هر سه اپراتور بزرگ آمریکا (Verizon، AT&T و T-Mobile) هم درخواست ماسک برای استفاده از شبکه‌شون رو رد کردن.\n\n💡 نظر تک‌روز: اگه این معامله سر بگیره، گوشی‌ها هم با آنتن معمولی کار می‌کنن هم با ماهواره؛ یعنی جایی بدون آنتن نمی‌مونه.\n\n#خبر\n\n⚡ تک‌روز | @techrooz_fa",
-  "posted": true,
-  "site": {
-   "title": "مذاکره‌ی اسپیس‌ایکس برای خرید یا اجاره‌ی شبکه‌ی Boost Mobile",
-   "body": "بر اساس گزارشی تازه، اسپیس‌ایکس با شرکت EchoStar، مالک اپراتور Boost Mobile، وارد مذاکره شده است. هدف می‌تواند خرید کامل این شرکت یا استفاده از زیرساخت شبکه‌ی آن باشد. گفته می‌شود ایلان ماسک در ماه مهر شخصاً با رئیس EchoStar دیدار کرده است.\n\n<b>چرا اسپیس‌ایکس به اپراتور زمینی نیاز دارد؟</b>\nاستارلینک قصد دارد به یک اپراتور کامل تلفن همراه در آمریکا تبدیل شود، اما سیگنال ماهواره‌ای در فضای بسته و مناطق شهری متراکم ضعیف است. ترکیب شبکه‌ی ماهواره‌ای و دکل‌های زمینی می‌تواند این ضعف را پوشش دهد.\n\n<b>جمع‌بندی</b>\nدر صورت نهایی شدن این معامله، رقابت تازه‌ای با سه اپراتور بزرگ آمریکا شکل می‌گیرد."
-  }
- },
- {
   "at": "2026-11-03T05:30:00Z",
   "cat": "games",
   "photo": "https://www.engadget.com/img/gallery/googles-ocarina-of-time-easter-egg-is-a-link-to-a-past-when-search-wasnt-horrible/l-intro-1793634639.jpg",
@@ -571,15 +559,6 @@
   "posted": true
  },
  {
-  "at": "2026-11-02T12:00:00Z",
-  "photo": "https://www.engadget.com/img/gallery/all-the-leaks-for-the-portal-prequel-f-stop-have-been-compiled-into-a-playable-game/l-intro-1793554498.jpg",
-  "caption": "🎮 <b>بازی کنسل‌شده‌ی Valve زنده شد: پیش‌درآمد Portal رو حالا می‌شه بازی کرد!</b>\n\nاسمش <b>F-Stop</b> بود؛ یه بازی که Valve قبل از Portal ساخت و هیچ‌وقت منتشرش نکرد. مکانیکش؟ با دوربین از اشیا عکس می‌گرفتی و بعد همون اشیا رو توی دنیا جابه‌جا یا عوض می‌کردی 🤯\n\n🔹 توی یه لو رفتن عظیم (بیش از ۱۲ ترابایت داده‌ی Steam) فایل‌هاش بیرون اومد\n🔹 بعد کد منبع و نقشه‌هاش هم لو رفت\n🔹 طرفدارا همه رو کنار هم گذاشتن و الان یه نسخه‌ی کامل و قابل بازی ساختن؛ فقط بعضی تکسچرها و دیالوگ‌ها رو نداره\n\n💡 نظر تک‌روز: Valve هنوز هیچ واکنشی نشون نداده؛ شاید همین سروصدا باعث بشه یه روز رسمی برگرده!\n\n💬 دوست دارید Valve این بازی رو رسمی بسازه؟\n\n#گیم\n\n⚡ تک‌روز | @techrooz_fa",
-  "source": "https://www.engadget.com/2303446/all-the-leaks-for-the-portal-prequel-f-stop-have-been-compiled-into-a-playable-game/",
-  "posted": false,
-  "hold": true,
-  "cat": "games"
- },
- {
   "at": "2026-11-09T16:30:00Z",
   "cat": "viral",
   "silent": true,
@@ -597,6 +576,15 @@
    "correct": 1,
    "explanation": "داونز مقاله‌اش رو سال ۱۹۶۲ منتشر کرد."
   },
-  "posted": false
+  "posted": true
+ },
+ {
+  "at": "2026-11-02T12:00:00Z",
+  "photo": "https://www.engadget.com/img/gallery/all-the-leaks-for-the-portal-prequel-f-stop-have-been-compiled-into-a-playable-game/l-intro-1793554498.jpg",
+  "caption": "🎮 <b>بازی کنسل‌شده‌ی Valve زنده شد: پیش‌درآمد Portal رو حالا می‌شه بازی کرد!</b>\n\nاسمش <b>F-Stop</b> بود؛ یه بازی که Valve قبل از Portal ساخت و هیچ‌وقت منتشرش نکرد. مکانیکش؟ با دوربین از اشیا عکس می‌گرفتی و بعد همون اشیا رو توی دنیا جابه‌جا یا عوض می‌کردی 🤯\n\n🔹 توی یه لو رفتن عظیم (بیش از ۱۲ ترابایت داده‌ی Steam) فایل‌هاش بیرون اومد\n🔹 بعد کد منبع و نقشه‌هاش هم لو رفت\n🔹 طرفدارا همه رو کنار هم گذاشتن و الان یه نسخه‌ی کامل و قابل بازی ساختن؛ فقط بعضی تکسچرها و دیالوگ‌ها رو نداره\n\n💡 نظر تک‌روز: Valve هنوز هیچ واکنشی نشون نداده؛ شاید همین سروصدا باعث بشه یه روز رسمی برگرده!\n\n💬 دوست دارید Valve این بازی رو رسمی بسازه؟\n\n#گیم\n\n⚡ تک‌روز | @techrooz_fa",
+  "source": "https://www.engadget.com/2303446/all-the-leaks-for-the-portal-prequel-f-stop-have-been-compiled-into-a-playable-game/",
+  "posted": false,
+  "hold": true,
+  "cat": "games"
  }
 ]
