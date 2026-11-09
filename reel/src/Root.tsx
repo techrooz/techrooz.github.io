@@ -17,6 +17,7 @@ import { Storage3D, TOTAL as ST_TOTAL } from "./Anim3D/StorageScene";
 import { Talk } from "./Talk/Talk";
 import { T_TOTAL } from "./Talk/data";
 import { Traffic3D, TOTAL as TR_TOTAL } from "./Anim3D/TrafficScene";
+import { Internet3D, TOTAL as IN_TOTAL } from "./Anim3D/InternetScene";
 import { Tips, TipsProps } from "./Tips";
 import { Editorial, EditorialProps } from "./Editorial";
 
@@ -113,5 +114,6 @@ export const Root: React.FC = () => (
     <Composition id="Storage3D" component={Storage3D} fps={FPS} width={1080} height={1920} durationInFrames={Math.round(ST_TOTAL * FPS)} defaultProps={{}} />
     <Composition id="Talk" component={Talk} fps={FPS} width={1080} height={1920} durationInFrames={Math.round(T_TOTAL * FPS)} defaultProps={{}} />
     <Composition id="Traffic3D" component={Traffic3D} fps={FPS} width={1080} height={1920} durationInFrames={Math.round(TR_TOTAL * FPS)} defaultProps={{}} />
+    <Composition id="Internet3D" component={Internet3D} fps={FPS} width={1080} height={1920} durationInFrames={Math.round(IN_TOTAL * FPS)} defaultProps={{}} />
   </>
 );
