@@ -1,18 +1,5 @@
 [
  {
-  "at": "2026-11-03T06:00:00Z",
-  "photo": "https://techcrunch.com/wp-content/uploads/2026/10/Pixel-11-fold-feat.jpg?resize=1200,675",
-  "caption": "📱 <b>پیکسل ۱۱ پرو فولد اومد؛ گوشی تاشوی جدید گوگل</b>\n\nتک‌کرانچ این گوشی تاشو رو بررسی کرده، اینا نکته‌های مهمشه:\n\n🔹 قیمت: ۱,۸۹۹ دلار (هم‌قیمت گلکسی Z فولد ۸)\n🔹 گوگل می‌گه ۳ برابر نسخه‌ی قبلی مقاوم‌تره و ۱۹ گرم هم سبک‌تر شده\n🔹 زوم ۳۰ برابری و صفحه‌ای با روشنایی ۳,۶۰۰ نیت\n🔹 نظر نهایی: خیلی شبیه مدل پارساله و بیشتر به درد طرفدارای پیکسل می‌خوره\n\n💬 گوشی تاشو می‌خرید یا هنوز بهش اعتماد ندارید؟\n\n📲 @techrooz_fa",
-  "source": "https://techcrunch.com/2026/11/01/pixel-11-pro-fold-sturdy-rectengale-in-a-wide-wide-world/",
-  "posted": true,
-  "hold": false,
-  "cat": "mobile",
-  "site": {
-   "title": "بررسی Pixel 11 Pro Fold؛ گوشی تاشوی جدید گوگل چه چیزهایی دارد؟",
-   "body": "گوگل گوشی تاشوی Pixel 11 Pro Fold را با قیمت ۱٬۸۹۹ دلار عرضه کرده است؛ رقمی برابر با گلکسی Z فولد ۸ سامسونگ. وب‌سایت TechCrunch این دستگاه را بررسی کرده است.\n\n<b>مشخصات کلیدی</b>\nبه گفته‌ی گوگل، این گوشی سه برابر نسل قبل مقاوم‌تر و ۱۹ گرم سبک‌تر است. زوم ۳۰ برابری و نمایشگری با روشنایی ۳٬۶۰۰ نیت از دیگر ویژگی‌های آن است.\n\n<b>نتیجه‌ی بررسی</b>\nTechCrunch معتقد است تغییرات نسبت به مدل سال گذشته محدود است و این دستگاه بیشتر برای علاقه‌مندان قدیمی سری پیکسل جذاب خواهد بود."
-  }
- },
- {
   "at": "2026-11-03T06:30:00Z",
   "cat": "ai",
   "photo": "https://techcrunch.com/wp-content/uploads/2026/03/garry-tan-sxsw-getty.jpg?resize=1200,801",
@@ -575,15 +562,6 @@
   "posted": true
  },
  {
-  "at": "2026-11-02T12:00:00Z",
-  "photo": "https://www.engadget.com/img/gallery/all-the-leaks-for-the-portal-prequel-f-stop-have-been-compiled-into-a-playable-game/l-intro-1793554498.jpg",
-  "caption": "🎮 <b>بازی کنسل‌شده‌ی Valve زنده شد: پیش‌درآمد Portal رو حالا می‌شه بازی کرد!</b>\n\nاسمش <b>F-Stop</b> بود؛ یه بازی که Valve قبل از Portal ساخت و هیچ‌وقت منتشرش نکرد. مکانیکش؟ با دوربین از اشیا عکس می‌گرفتی و بعد همون اشیا رو توی دنیا جابه‌جا یا عوض می‌کردی 🤯\n\n🔹 توی یه لو رفتن عظیم (بیش از ۱۲ ترابایت داده‌ی Steam) فایل‌هاش بیرون اومد\n🔹 بعد کد منبع و نقشه‌هاش هم لو رفت\n🔹 طرفدارا همه رو کنار هم گذاشتن و الان یه نسخه‌ی کامل و قابل بازی ساختن؛ فقط بعضی تکسچرها و دیالوگ‌ها رو نداره\n\n💡 نظر تک‌روز: Valve هنوز هیچ واکنشی نشون نداده؛ شاید همین سروصدا باعث بشه یه روز رسمی برگرده!\n\n💬 دوست دارید Valve این بازی رو رسمی بسازه؟\n\n#گیم\n\n⚡ تک‌روز | @techrooz_fa",
-  "source": "https://www.engadget.com/2303446/all-the-leaks-for-the-portal-prequel-f-stop-have-been-compiled-into-a-playable-game/",
-  "posted": false,
-  "hold": true,
-  "cat": "games"
- },
- {
   "at": "2026-11-11T09:30:00Z",
   "cat": "poll",
   "photo": "",
@@ -597,7 +575,16 @@
   },
   "caption": "",
   "source": "",
-  "posted": false
+  "posted": true
+ },
+ {
+  "at": "2026-11-02T12:00:00Z",
+  "photo": "https://www.engadget.com/img/gallery/all-the-leaks-for-the-portal-prequel-f-stop-have-been-compiled-into-a-playable-game/l-intro-1793554498.jpg",
+  "caption": "🎮 <b>بازی کنسل‌شده‌ی Valve زنده شد: پیش‌درآمد Portal رو حالا می‌شه بازی کرد!</b>\n\nاسمش <b>F-Stop</b> بود؛ یه بازی که Valve قبل از Portal ساخت و هیچ‌وقت منتشرش نکرد. مکانیکش؟ با دوربین از اشیا عکس می‌گرفتی و بعد همون اشیا رو توی دنیا جابه‌جا یا عوض می‌کردی 🤯\n\n🔹 توی یه لو رفتن عظیم (بیش از ۱۲ ترابایت داده‌ی Steam) فایل‌هاش بیرون اومد\n🔹 بعد کد منبع و نقشه‌هاش هم لو رفت\n🔹 طرفدارا همه رو کنار هم گذاشتن و الان یه نسخه‌ی کامل و قابل بازی ساختن؛ فقط بعضی تکسچرها و دیالوگ‌ها رو نداره\n\n💡 نظر تک‌روز: Valve هنوز هیچ واکنشی نشون نداده؛ شاید همین سروصدا باعث بشه یه روز رسمی برگرده!\n\n💬 دوست دارید Valve این بازی رو رسمی بسازه؟\n\n#گیم\n\n⚡ تک‌روز | @techrooz_fa",
+  "source": "https://www.engadget.com/2303446/all-the-leaks-for-the-portal-prequel-f-stop-have-been-compiled-into-a-playable-game/",
+  "posted": false,
+  "hold": true,
+  "cat": "games"
  },
  {
   "at": "2026-11-11T15:20:00Z",
