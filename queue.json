@@ -1,25 +1,5 @@
 [
  {
-  "at": "2026-11-04T16:30:00Z",
-  "cat": "viral",
-  "silent": true,
-  "photo": "",
-  "source": "",
-  "caption": "کوییز: بازی مار نوکیا",
-  "poll": {
-   "question": "🧠 کوییز: بازی معروف «مار» (Snake) اولین بار روی گوشی کدوم برند اومد؟",
-   "options": [
-    "سامسونگ",
-    "نوکیا",
-    "موتورولا",
-    "سونی اریکسون"
-   ],
-   "correct": 1,
-   "explanation": "بازی مار سال ۱۹۹۷ روی گوشی نوکیا ۶۱۱۰ اومد و یکی از معروف‌ترین بازی‌های موبایل شد."
-  },
-  "posted": true
- },
- {
   "at": "2026-11-04T18:00:00Z",
   "cat": "digest",
   "photo": "https://9to5google.com/wp-content/uploads/sites/4/2026/04/chatgpt-android-1.jpg?quality=82&strip=all&resize=1200,628",
@@ -601,6 +581,18 @@
   "posted": true
  },
  {
+  "at": "2026-11-20T08:30:00Z",
+  "cat": "ai",
+  "photo": "https://techrooz.github.io/v/cover_bmw.jpg",
+  "source": "",
+  "caption": "🚗 <b>ریل چراغ لیزری BMW رو دیدی؟ این هم نسخه‌ی کاربردیش برای خرید ماشین</b>\n\nتوی ریل گفتیم BMW با چراغ لیزری (گزینه‌ی اختیاری روی i8، ۲۰۱۴) بُرد نور رو تا حدود ۶۰۰ متر می‌رسوند (این عدد ادعای خود BMW است)، ولی ال‌ایدی ماتریسی هم قوی شد و خیلی جاها جاش رو گرفت. اگه می‌خوای ماشینی بخری، قبل از هر چیز این ۴ سؤال رو بپرس:\n\n1️⃣ <b>ماتریسی (Matrix/Adaptive) هست؟</b> یعنی نور بالا تکه‌تکه خاموش می‌شه تا چشم راننده‌ی روبه‌رو اذیت نشه.\n2️⃣ <b>تنظیم خودکار ارتفاع (auto-leveling) داره؟</b>\n3️⃣ <b>قیمت تعویض یه چراغ چقدره؟</b> توی ماشین‌های پیشرفته می‌تونه خیلی بالا باشه (عدد دقیق بین مدل‌ها فرق می‌کنه؛ از فروشنده بپرس).\n4️⃣ <b>قوانین کشور مقصد چیه؟</b> ممکنه بعضی نسخه‌ها همه‌جا مجاز نباشن.\n\n🤖 <b>پرامپت آماده برای مقایسه (به هر چت هوش مصنوعی بده):</b>\n<code>Compare the headlight systems of [car A] and [car B]: type (LED, Matrix LED, Laser), claimed range, adaptive features, and typical replacement cost. Separate official claims from reviews, and tell me what you are unsure about.</code>\n\n⚠️ اعداد بالا ادعای سازنده یا گزارش رسانه‌هاست و برای مدل مشخص باید از فروشنده بپرسی.\n\n❓ تو کدوم رو انتخاب می‌کنی؟\n🔵 چراغ ۶۰۰ متری\n🟢 ماتریسی هوشمند\n\n#ماشین #BMW #تکنولوژی\n\n⚡ تک‌روز | @techrooz_fa",
+  "site": {
+   "title": "چراغ لیزری یا ال‌ایدی ماتریسی؛ چهار سؤال قبل از خرید خودرو",
+   "body": "چراغ لیزری از ۲۰۱۴ روی BMW i8 عرضه شد و طبق ادعای BMW بُردی تا حدود ۶۰۰ متر دارد؛ اما ال‌ایدی ماتریسی هم پیشرفت کرده است. پیش از خرید خودرو چهار پرسش را بررسی کنید:\n\n<b>۱.</b> آیا چراغ ماتریسی/تطبیقی دارد؟\n<b>۲.</b> آیا تنظیم خودکار ارتفاع دارد؟\n<b>۳.</b> هزینه‌ی تعویض یک چراغ چقدر است؟ (رقم دقیق به مدل بستگی دارد و باید از فروشنده پرسیده شود)\n<b>۴.</b> آیا قوانین کشور مقصد با آن سازگار است؟\n\nبرای مقایسه می‌توانید از این پرامپت استفاده کنید:\n<code>Compare the headlight systems of [car A] and [car B]: type (LED, Matrix LED, Laser), claimed range, adaptive features, and typical replacement cost. Separate official claims from reviews, and tell me what you are unsure about.</code>\n\nاعداد بالا ادعای سازنده یا گزارش رسانه‌هاست."
+  },
+  "posted": true
+ },
+ {
   "at": "2026-11-02T12:00:00Z",
   "photo": "https://www.engadget.com/img/gallery/all-the-leaks-for-the-portal-prequel-f-stop-have-been-compiled-into-a-playable-game/l-intro-1793554498.jpg",
   "caption": "🎮 <b>بازی کنسل‌شده‌ی Valve زنده شد: پیش‌درآمد Portal رو حالا می‌شه بازی کرد!</b>\n\nاسمش <b>F-Stop</b> بود؛ یه بازی که Valve قبل از Portal ساخت و هیچ‌وقت منتشرش نکرد. مکانیکش؟ با دوربین از اشیا عکس می‌گرفتی و بعد همون اشیا رو توی دنیا جابه‌جا یا عوض می‌کردی 🤯\n\n🔹 توی یه لو رفتن عظیم (بیش از ۱۲ ترابایت داده‌ی Steam) فایل‌هاش بیرون اومد\n🔹 بعد کد منبع و نقشه‌هاش هم لو رفت\n🔹 طرفدارا همه رو کنار هم گذاشتن و الان یه نسخه‌ی کامل و قابل بازی ساختن؛ فقط بعضی تکسچرها و دیالوگ‌ها رو نداره\n\n💡 نظر تک‌روز: Valve هنوز هیچ واکنشی نشون نداده؛ شاید همین سروصدا باعث بشه یه روز رسمی برگرده!\n\n💬 دوست دارید Valve این بازی رو رسمی بسازه؟\n\n#گیم\n\n⚡ تک‌روز | @techrooz_fa",
@@ -622,18 +614,6 @@
   "posted": false,
   "hold": true,
   "hold_reason": "video tool availability/names not verified"
- },
- {
-  "at": "2026-11-20T08:30:00Z",
-  "cat": "ai",
-  "photo": "https://techrooz.github.io/v/cover_bmw.jpg",
-  "source": "",
-  "caption": "🚗 <b>ریل چراغ لیزری BMW رو دیدی؟ این هم نسخه‌ی کاربردیش برای خرید ماشین</b>\n\nتوی ریل گفتیم BMW با چراغ لیزری (گزینه‌ی اختیاری روی i8، ۲۰۱۴) بُرد نور رو تا حدود ۶۰۰ متر می‌رسوند (این عدد ادعای خود BMW است)، ولی ال‌ایدی ماتریسی هم قوی شد و خیلی جاها جاش رو گرفت. اگه می‌خوای ماشینی بخری، قبل از هر چیز این ۴ سؤال رو بپرس:\n\n1️⃣ <b>ماتریسی (Matrix/Adaptive) هست؟</b> یعنی نور بالا تکه‌تکه خاموش می‌شه تا چشم راننده‌ی روبه‌رو اذیت نشه.\n2️⃣ <b>تنظیم خودکار ارتفاع (auto-leveling) داره؟</b>\n3️⃣ <b>قیمت تعویض یه چراغ چقدره؟</b> توی ماشین‌های پیشرفته می‌تونه خیلی بالا باشه (عدد دقیق بین مدل‌ها فرق می‌کنه؛ از فروشنده بپرس).\n4️⃣ <b>قوانین کشور مقصد چیه؟</b> ممکنه بعضی نسخه‌ها همه‌جا مجاز نباشن.\n\n🤖 <b>پرامپت آماده برای مقایسه (به هر چت هوش مصنوعی بده):</b>\n<code>Compare the headlight systems of [car A] and [car B]: type (LED, Matrix LED, Laser), claimed range, adaptive features, and typical replacement cost. Separate official claims from reviews, and tell me what you are unsure about.</code>\n\n⚠️ اعداد بالا ادعای سازنده یا گزارش رسانه‌هاست و برای مدل مشخص باید از فروشنده بپرسی.\n\n❓ تو کدوم رو انتخاب می‌کنی؟\n🔵 چراغ ۶۰۰ متری\n🟢 ماتریسی هوشمند\n\n#ماشین #BMW #تکنولوژی\n\n⚡ تک‌روز | @techrooz_fa",
-  "site": {
-   "title": "چراغ لیزری یا ال‌ایدی ماتریسی؛ چهار سؤال قبل از خرید خودرو",
-   "body": "چراغ لیزری از ۲۰۱۴ روی BMW i8 عرضه شد و طبق ادعای BMW بُردی تا حدود ۶۰۰ متر دارد؛ اما ال‌ایدی ماتریسی هم پیشرفت کرده است. پیش از خرید خودرو چهار پرسش را بررسی کنید:\n\n<b>۱.</b> آیا چراغ ماتریسی/تطبیقی دارد؟\n<b>۲.</b> آیا تنظیم خودکار ارتفاع دارد؟\n<b>۳.</b> هزینه‌ی تعویض یک چراغ چقدر است؟ (رقم دقیق به مدل بستگی دارد و باید از فروشنده پرسیده شود)\n<b>۴.</b> آیا قوانین کشور مقصد با آن سازگار است؟\n\nبرای مقایسه می‌توانید از این پرامپت استفاده کنید:\n<code>Compare the headlight systems of [car A] and [car B]: type (LED, Matrix LED, Laser), claimed range, adaptive features, and typical replacement cost. Separate official claims from reviews, and tell me what you are unsure about.</code>\n\nاعداد بالا ادعای سازنده یا گزارش رسانه‌هاست."
-  },
-  "posted": false
  },
  {
   "at": "2026-11-20T12:00:00Z",
